@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/qt,qtcreator,c++,clion,linux
-# Edit at https://www.toptal.com/developers/gitignore?templates=qt,qtcreator,c++,clion,linux
+# Created by https://www.toptal.com/developers/gitignore/api/cmake,linux,c++,clion,qt,qtcreator
+# Edit at https://www.toptal.com/developers/gitignore?templates=cmake,linux,c++,clion,qt,qtcreator
 
 ### C++ ###
 # Prerequisites
@@ -144,6 +144,24 @@ fabric.properties
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
 
+### CMake ###
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+CMakeUserPresets.json
+
+### CMake Patch ###
+# External projects
+*-prefix/
+
 ### Linux ###
 *~
 
@@ -199,7 +217,6 @@ target_wrapper.*
 CMakeLists.txt.user*
 
 # QtCreator 4.8< compilation database 
-compile_commands.json
 
 # QtCreator local machine specific files for imported projects
 *creator.user*
@@ -236,4 +253,4 @@ compile_commands.json
 *.cflags
 
 
-# End of https://www.toptal.com/developers/gitignore/api/qt,qtcreator,c++,clion,linux
+# End of https://www.toptal.com/developers/gitignore/api/cmake,linux,c++,clion,qt,qtcreator
