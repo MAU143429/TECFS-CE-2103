@@ -254,3 +254,5 @@ CMakeLists.txt.user*
 
 
 # End of https://www.toptal.com/developers/gitignore/api/cmake,linux,c++,clion,qt,qtcreator
+
+.idea/discord.xml
