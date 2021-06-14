@@ -1,6 +1,7 @@
 #include <iostream>
-
+#include "src/Socket/Server.h"
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+
+    Server::InitServer();
     return 0;
 }

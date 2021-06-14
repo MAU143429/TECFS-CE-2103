@@ -1,6 +1,8 @@
 #include <iostream>
+#include "src/Socket/Client.cpp"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+
+    InitClient();
     return 0;
 }
