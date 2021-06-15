@@ -1,12 +1,18 @@
 #include <iostream>
+#include <thread>
 #include "src/Algorithms/HuffmanCompression.h"
 #include "src/Objects/Huffman_Message.h"
 #include "src/UtilJSON/JSON_Management.h"
+#include "src/Socket/Server.h"
 
 using namespace std;
-int main() {
 
-    //Server::InitServer();
+void RunServer() {
+    cout << "Server is running" << endl;
+    Server::InitServer();
+}
+
+void mainv2(){
     auto newSMS = new TypeMessage();
     newSMS->setMessage("SOY EL MENSAJE QUE QUIEREN ENVIAR");
     string prueba = JSON_Management::TypeMessageToJSON(newSMS);
@@ -20,6 +26,13 @@ int main() {
     string final_result;
     final_result = JSON_Management::HuffmanMessageToJSON(message);
     cout << "\n SOY EL MENSAJE YA LISTO" << final_result << endl;
+}
+int main() {
+
+    thread runs(RunServer);
+    thread main(mainv2);
+    runs.join();
+    main.join();
 
     return 0;
 }
