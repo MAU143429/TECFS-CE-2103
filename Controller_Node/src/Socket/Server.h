@@ -19,7 +19,7 @@
 using namespace std;
 class Server{
 public:
-    static void InitServer()
+    [[noreturn]] static void InitServer()
     {
         int clientSocket[30];
         int PORT;
@@ -37,7 +37,7 @@ public:
         char buffer[8192];
         const char *message = "YOU HAVE CONNECT TO SERVER! YOU CAN SEND AND RECIEVE MESSAGES NOW! \n";
 
-        cout << "[-->] Please enter tha port number for server to select!" <<  endl;
+        cout << "[-->] Please enter the port number for server to select!" <<  endl;
         cin >> PORT;
 
         for (int i = 0; i < max_clients; ++i) {
@@ -127,14 +127,11 @@ public:
                     }else{
                         if(bytesReceived > 0){
 
-                            cout<< "Client[ " << i << "]:" << string(buffer,0,bytesReceived) << endl;
+                            cout<< "Client["<< i << "]:" << string(buffer,0,bytesReceived) << endl;
+                            send(clientSocket[i],buffer, strlen(buffer),0);
                         }
-                        for (int i = 0; i < max_clients; ++i) {
-                            sd = clientSocket[i];
-                            if(sd != 0 ){
-                                send(sd,buffer, strlen(buffer),0);
-                            }
-                        }
+
+
                     }
 
                 }
