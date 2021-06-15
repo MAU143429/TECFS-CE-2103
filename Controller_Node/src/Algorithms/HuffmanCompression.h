@@ -8,6 +8,8 @@
 #include <string>
 #include <queue>
 #include <unordered_map>
+#include "../../../lib/DataStructures/SimplyList.h"
+#include "../Objects/Huffman_pair.h"
 using namespace std;
 
 class HuffmanCompression {
@@ -80,7 +82,7 @@ public:
     }
 
 // Builds Huffman Tree and decode given input text
-    static void buildHuffmanTree(const string& text)
+    static pair<string,SimplyLinkedList<Huffman_pair*>*> buildHuffmanTree(const string& text)
     {
         // count frequency of appearance of each character
         // and store it in a map
@@ -124,8 +126,14 @@ public:
         encode(root, "", huffmanCode);
 
         cout << "Huffman Codes are :\n" << '\n';
+        auto huffman_result = new SimplyLinkedList<Huffman_pair*>();
+
         for (const auto& pair: huffmanCode) {
             cout << pair.first << " " << pair.second << '\n';
+            auto new_pair = new Huffman_pair();
+            new_pair->setCH(pair.first);
+            new_pair->setCode(pair.second);
+            huffman_result->append(new_pair);
         }
 
         cout << "\nOriginal string was :\n" << text << '\n';
@@ -145,6 +153,11 @@ public:
         while (index < (int)str.size() - 2) {
             decode(root, index, str);
         }
+        pair<string,SimplyLinkedList<Huffman_pair*>*> result;
+        result.first = str;
+        result.second = huffman_result;
+
+        return result;
     }
 };
 

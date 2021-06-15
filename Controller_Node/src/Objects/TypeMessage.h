@@ -6,12 +6,23 @@
 #define TEC_FS_TYPEMESSAGE_H
 
 #include <iostream>
-#include "../DataStructures/SimplyList.h"
+#include "../../../lib/DataStructures/SimplyList.h"
 
 using namespace std;
 
 class TypeMessage
 {
+private:
+    string message_to_send;
+public:
+
+    const string& getMessage() const {
+        return message_to_send;
+    }
+
+    void setMessage(const string& newsms) {
+        message_to_send = newsms;
+    }
 
 };
 
