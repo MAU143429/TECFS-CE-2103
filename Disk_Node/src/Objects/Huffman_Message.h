@@ -1,0 +1,8 @@
+//
+// Created by mau on 6/14/21.
+//
+
+#ifndef DISK_NODE_HUFFMAN_MESSAGE_H
+#define DISK_NODE_HUFFMAN_MESSAGE_H
+
+#endif //DISK_NODE_HUFFMAN_MESSAGE_H
