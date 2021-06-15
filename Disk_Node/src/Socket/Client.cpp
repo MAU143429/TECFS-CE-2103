@@ -15,7 +15,7 @@
 using namespace std;
 
 
-int InitClient()
+[[noreturn]] int InitClient()
 {
     int port;
     int clientSocket = socket(AF_INET,SOCK_STREAM,0);
@@ -54,7 +54,18 @@ int InitClient()
             cout<<"Could not send to server\r\n";
             continue;
         }
-
+        //		Wait for response
+        memset(buf, 0, 4096);
+        int bytesReceived = recv(clientSocket, buf, 4096, 0);
+        if (bytesReceived == -1)
+        {
+            cout << "There was an error getting response from server\r\n";
+        }
+        else
+        {
+            //		Display response
+            cout << "SERVER> " << string(buf, bytesReceived) << "\r\n";
+        }
 
     }while(true);
 
