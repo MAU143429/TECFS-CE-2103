@@ -10,6 +10,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_FLAGS -pthread)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
 # Check http://doc.qt.io/qt-5/deployment-android.html for more information.
@@ -30,28 +31,28 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 if(ANDROID)
   add_library(TECFS-QT SHARED
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
-    cesearch.cpp
-    cesearch.h
-    cesearch.ui
-    cerobot.cpp
-    cerobot.h
-    cerobot.ui
+          src/MainWindow/mainwindow.cpp
+          src/MainWindow/mainwindow.h
+          src/MainWindow/mainwindow.ui
+          src/ceSearch/cesearch.cpp
+          src/ceSearch/cesearch.h
+          src/ceSearch/cesearch.ui
+          src/ceRobot/cerobot.cpp
+          src/ceRobot/cerobot.h
+          src/ceRobot/cerobot.ui
   )
 else()
   add_executable(TECFS-QT
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
-    cesearch.cpp
-    cesearch.h
-    cesearch.ui
-    cerobot.cpp
-    cerobot.h
-    cerobot.ui
+          src/MainWindow/mainwindow.cpp
+          src/MainWindow/mainwindow.h
+          src/MainWindow/mainwindow.ui
+          src/ceSearch/cesearch.cpp
+          src/ceSearch/cesearch.h
+          src/ceSearch/cesearch.ui
+          src/ceRobot/cerobot.cpp
+          src/ceRobot/cerobot.h
+          src/ceRobot/cerobot.ui
   )
 endif()
 

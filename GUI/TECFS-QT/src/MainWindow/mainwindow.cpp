@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "cerobot.h"
-#include "cesearch.h"
+#include "src/ceRobot/cerobot.h"
+#include "src/ceSearch/cesearch.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
