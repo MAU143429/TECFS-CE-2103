@@ -159,6 +159,49 @@ public:
 
         return result;
     }
+
+    static string Decode_Huffman(string str,SimplyLinkedList<Huffman_pair*>* huffman_list ){
+
+        vector<char> characters;
+        vector<string> scripts;
+        string result , curr;
+        int max_chars = 0;
+
+        for (int i = 0; i < huffman_list->getLen(); ++i) {
+            characters.push_back(huffman_list->get(i)->getCH());
+            scripts.push_back(huffman_list->get(i)->getCode());
+        }
+
+        while(max_chars < str.size()){
+            curr.push_back(str[max_chars]);
+            if(isChar(scripts,curr)){
+
+                result.push_back(characters[getKey(scripts,curr)]);
+                curr.clear();
+
+            }
+            max_chars++;
+        }
+        return result;
+    }
+
+    static bool isChar(vector<string> scripts , string key){
+
+        for (int i = 0; i < scripts.size(); ++i) {
+            if(scripts[i] == key){
+                return true;
+            }
+        }
+    }
+
+    static int getKey(vector<string> scripts , string pos){
+
+        for (int i = 0; i < scripts.size(); ++i) {
+            if (scripts[i] == pos) {
+                return i;
+            }
+        }
+    }
 };
 
 
