@@ -16,7 +16,7 @@ using namespace std;
 
 int clientSocket = socket(AF_INET,SOCK_STREAM,0);
 
-void Send(const char *msg) {
+static void Send(const char *msg) {
     int sendRes = send(clientSocket, msg, strlen(msg), 0);
     if (sendRes == -1) {
         std::cout << "SEND MESSAGE FAILED " << std::endl;
