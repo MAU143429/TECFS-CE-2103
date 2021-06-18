@@ -128,6 +128,13 @@ public:
                         if(bytesReceived > 0){
 
                             cout<< "Client["<< i << "]:" << string(buffer,0,bytesReceived) << endl;
+                            string message = string(buffer,0,bytesReceived);
+                            string first = JSON_Management::GetJSONString("First_Time", message);
+                            if(first == "TRUE"){
+                                string type1  = JSON_Management::GetJSONString("Client_Type", message);
+                                string type2 =  JSON_Management::GetJSONString("Specific_Type", message);
+                                Identify_Client(type1,type2,i);
+                            }
                             send(clientSocket[i],buffer, strlen(buffer),0);
                         }
 
@@ -139,6 +146,26 @@ public:
         }
 
 
+    }
+
+    static void Identify_Client(string client, string specific,int num){
+
+        static int Disk1_Client;
+        static int Disk2_Client;
+        static int Parity_Disk_Client;
+        static int App_Client;
+
+        if(client == "DISK"){
+            if(specific == "D1"){
+                Disk1_Client = num;
+            }else if(specific == "D2"){
+                Disk2_Client = num;
+            }else if(specific == "P1"){
+                Parity_Disk_Client = num;
+            }
+        }else {
+            App_Client = num;
+        }
     }
 };
 

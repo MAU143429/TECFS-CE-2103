@@ -13,7 +13,7 @@ using namespace std;
 class TypeMessage
 {
 private:
-    string message_to_send;
+    string message_to_send,;
 public:
 
     const string& getMessage() const {
