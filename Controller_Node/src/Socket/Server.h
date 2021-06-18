@@ -13,6 +13,9 @@
 #include <iostream>
 #include <pthread.h>
 #include <arpa/inet.h>
+#include "../App_Controller/App_Controller.h"
+#include "../DiskNodes_Controller/Disk_Controller.h"
+
 
 #define TRUE 1
 
@@ -130,10 +133,12 @@ public:
                             cout<< "Client["<< i << "]:" << string(buffer,0,bytesReceived) << endl;
                             string message = string(buffer,0,bytesReceived);
                             string first = JSON_Management::GetJSONString("First_Time", message);
+                            string type1  = JSON_Management::GetJSONString("Client_Type", message);
                             if(first == "TRUE"){
-                                string type1  = JSON_Management::GetJSONString("Client_Type", message);
                                 string type2 =  JSON_Management::GetJSONString("Specific_Type", message);
                                 Identify_Client(type1,type2,i);
+                            }else{
+                                Identify_Controller(type1,message);
                             }
                             send(clientSocket[i],buffer, strlen(buffer),0);
                         }
@@ -165,6 +170,15 @@ public:
             }
         }else {
             App_Client = num;
+        }
+    }
+
+    static void Identify_Controller(string type,string sms){
+
+        if(type == "DISK"){
+            Disk_Controller::Controller_Disk(sms);
+        }else {
+            App_Controller::Controller_App(sms);
         }
     }
 };
