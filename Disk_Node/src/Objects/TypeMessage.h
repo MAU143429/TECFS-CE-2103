@@ -6,7 +6,7 @@
 #define TEC_FS_TYPEMESSAGE_H
 
 #include <iostream>
-#include "../../DataStructures/SimplyList.h"
+#include "../../../lib/DataStructures/SimplyList.h"
 
 using namespace std;
 
