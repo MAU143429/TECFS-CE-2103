@@ -10,6 +10,10 @@
 #include <iostream>
 #include <pthread.h>
 #include <arpa/inet.h>
+#include "../Objects/Huffman_Message.h"
+#include "../../../lib/DataStructures/SimplyList.h"
+#include "../UtilJSON/JSON_Management.h"
+#include "../Algorithms/HuffmanCompression.h"
 
 
 using namespace std;
@@ -17,7 +21,15 @@ using namespace std;
 int clientSocket = socket(AF_INET,SOCK_STREAM,0);
 
 static void Send(const char *msg) {
-    int sendRes = send(clientSocket, msg, strlen(msg), 0);
+    pair<string,SimplyLinkedList<Huffman_pair*>*> compressed;
+    compressed = HuffmanCompression::buildHuffmanTree(msg);
+    auto final_sms = new Huffman_Message();
+    final_sms->setCompress_Code(compressed.first);
+    for (int i = 0; i < compressed.second->getLen(); ++i) {
+        final_sms->getHuffman_Table()->append(compressed.second->get(i));
+    }
+    string final = JSON_Management::HuffmanMessageToJSON(final_sms);
+    int sendRes = send(clientSocket, final.c_str(), strlen(msg), 0);
     if (sendRes == -1) {
         std::cout << "SEND MESSAGE FAILED " << std::endl;
     }

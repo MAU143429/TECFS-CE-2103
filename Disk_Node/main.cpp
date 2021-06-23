@@ -17,15 +17,7 @@ void RunClient(string client) {
         Connect_sms->setSpecific("P1");
     }
     string newjson = JSON_Management::TypeMessageToJSON(Connect_sms);
-    pair<string,SimplyLinkedList<Huffman_pair*>*> compressed;
-    compressed = HuffmanCompression::buildHuffmanTree(newjson);
-    auto final_sms = new Huffman_Message();
-    final_sms->setCompress_Code(compressed.first);
-    for (int i = 0; i < compressed.second->getLen(); ++i) {
-        final_sms->getHuffman_Table()->append(compressed.second->get(i));
-    }
-    string final = JSON_Management::HuffmanMessageToJSON(final_sms);
-    Send(final.c_str());
+    Send(newjson.c_str());
 }
 
 int main() {
