@@ -4,7 +4,7 @@
 
 #ifndef TEC_FS_APP_CONTROLLER_H
 #define TEC_FS_APP_CONTROLLER_H
-using namespace std:
+using namespace std;
 
 
 class App_Controller{

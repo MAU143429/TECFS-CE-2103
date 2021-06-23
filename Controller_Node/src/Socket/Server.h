@@ -129,8 +129,8 @@ public:
 
                     }else{
                         if(bytesReceived > 0){
-
                             cout<< "Client["<< i << "]:" << string(buffer,0,bytesReceived) << endl;
+
                             string message = string(buffer,0,bytesReceived);
                             string first = JSON_Management::GetJSONString("First_Time", message);
                             string type1  = JSON_Management::GetJSONString("Client_Type", message);
