@@ -129,8 +129,8 @@ public:
 
                     }else{
                         if(bytesReceived > 0){
-
                             cout<< "Client["<< i << "]:" << string(buffer,0,bytesReceived) << endl;
+
                             string message = string(buffer,0,bytesReceived);
                             string first = JSON_Management::GetJSONString("First_Time", message);
                             string type1  = JSON_Management::GetJSONString("Client_Type", message);
@@ -163,13 +163,17 @@ public:
         if(client == "DISK"){
             if(specific == "D1"){
                 Disk1_Client = num;
+                cout<< "EL DISCO 1 SE HA CONECTADO CON EXITO" << endl;
             }else if(specific == "D2"){
                 Disk2_Client = num;
+                cout<< "EL DISCO 2 SE HA CONECTADO CON EXITO" << endl;
             }else if(specific == "P1"){
                 Parity_Disk_Client = num;
+                cout<< "EL DISCO DE PARIDAD SE HA CONECTADO CON EXITO" << endl;
             }
         }else {
             App_Client = num;
+            cout<< "LA APLICACION DE PRUEBA SE HA CONECTADO CON EXITO" << endl;
         }
     }
 

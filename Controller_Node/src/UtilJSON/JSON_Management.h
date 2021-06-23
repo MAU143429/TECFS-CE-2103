@@ -119,6 +119,29 @@ public:
 
         writer->EndObject();
     }
+    /**
+    * @brief Method that serializes a Huffman_pair.h object using a writer object
+    * @param writer object used for serializing object and huffmanObject is the Huffman_pair.h object
+    */
+    static SimplyLinkedList<Huffman_pair *> DeserializeHuffmanJSONArray(const string &s){
+        rapidjson::Document doc;
+        auto list = SimplyLinkedList<Huffman_pair*>();
+        doc.Parse(s.c_str());
+        if (!doc.IsArray())
+            return list;
+        for (rapidjson::Value::ConstValueIterator itr = doc.Begin(); itr != doc.End(); ++itr) {
+            auto *huffman = new Huffman_pair();
+            DeserializeHuffman_Pair(*itr, huffman);
+            list.append(huffman);
+        }
+        return list;
+    }
+
+    static void DeserializeHuffman_Pair(const rapidjson::Value &obj, Huffman_pair * pair){
+        string var = obj["huffman_Ch"].GetString();
+        pair->setCode(obj["huffman_codes"].GetString());
+        pair->setCH(var[1]);
+    }
 
 };
 #endif //TEC_FS_JSON_MANAGEMENT_H

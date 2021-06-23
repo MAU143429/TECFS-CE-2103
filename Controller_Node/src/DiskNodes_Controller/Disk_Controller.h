@@ -6,7 +6,7 @@
 #define TEC_FS_DISK_CONTROLLER_H
 
 
-using namespace std:
+using namespace std;
 
 
 class Disk_Controller{
