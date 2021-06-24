@@ -4,8 +4,12 @@
 #include "src/Algorithms/HuffmanCompression.h"
 #include "src/UtilJSON/JSON_Management.h"
 
-void RunClient(string client) {
+void RunClient() {
     InitClient();
+
+}
+
+void sendMain(const string& client){
     auto Connect_sms = new TypeMessage();
     Connect_sms->setClient("DISK");
     Connect_sms->setFirst("TRUE");
@@ -27,7 +31,9 @@ int main() {
     cout<< "Define the type of the Disk: " ;
     getline(cin, userInput);
     client = userInput;
-    thread runs(RunClient,client);
+    thread runs(RunClient);
+    thread runs2(sendMain, client);
     runs.join();
+    runs2.join();
     return 0;
 }

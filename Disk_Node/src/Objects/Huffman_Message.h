@@ -6,6 +6,7 @@
 #define DISK_NODE_HUFFMAN_MESSAGE_H
 #include <string>
 #include"../Objects/Huffman_pair.h"
+#include "../../../lib/DataStructures/SimplyList.h"
 using namespace std;
 
 
