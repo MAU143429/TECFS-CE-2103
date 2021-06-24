@@ -29,8 +29,8 @@ static void Send(const char *msg) {
         final_sms->getHuffman_Table()->append(compressed.second->get(i));
     }
     string final = JSON_Management::HuffmanMessageToJSON(final_sms);
-    cout<<"SOY EL MENSAJE QUE SE VA A ENVIAR " << final <<endl;
-    int sendRes = send(clientSocket, final.c_str(), strlen(msg), 0);
+    cout << final;
+    int sendRes = send(clientSocket, final.c_str(), final.size()+1, 0);
     if (sendRes == -1) {
         std::cout << "SEND MESSAGE FAILED " << std::endl;
     }
@@ -55,8 +55,7 @@ int InitClient()
     if(connectRes == 0){
         cout<< "You have connect to server !" << endl;
     }
-    string msg = "Soy el cliente y me acabo de conectar";
-    Send(msg.c_str());
+
     if(connectRes == -1){
         return 1;
     }

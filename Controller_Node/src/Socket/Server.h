@@ -130,14 +130,17 @@ public:
                     }else{
                         if(bytesReceived > 0){
                             cout<< "Client["<< i << "]:" << string(buffer,0,bytesReceived) << endl;
+
                             string message = string(buffer,0,bytesReceived);
-                            cout<<"SOY EL MENSAJE  ----->  " << message <<  endl;
-                            string str = JSON_Management::GetJSONString("Code",message);
-                            string table = JSON_Management::GetJSONString("HuffmanTable",message);
-                            SimplyLinkedList<Huffman_pair*>* h_table = JSON_Management::DeserializeHuffmanJSONArray(table);
-                            string msg = HuffmanCompression::Decode_Huffman(str,h_table);
+                            cout << "Soy el message" << " " << message << endl;
+                            auto huffmanMessage = new Huffman_Message();
+                            huffmanMessage = JSON_Management::DeserializetoHuffmanMessage(message);
+
+                            string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
+                            cout << "SOY EL MESAJEJE  " << " "<< msg << endl;
                             string first = JSON_Management::GetJSONString("First_Time", msg);
                             string type1  = JSON_Management::GetJSONString("Client_Type", msg);
+
                             if(first == "TRUE"){
                                 string type2 =  JSON_Management::GetJSONString("Specific_Type", msg);
                                 Identify_Client(type1,type2,i);
@@ -158,7 +161,7 @@ public:
 
     }
 
-    static void Identify_Client(string client, string specific,int num){
+    static void Identify_Client(const string& client, const string& specific,int num){
 
         static int Disk1_Client;
         static int Disk2_Client;
@@ -182,7 +185,7 @@ public:
         }
     }
 
-    static void Identify_Controller(string type,string sms){
+    static void Identify_Controller(const string& type,const string& sms){
 
         if(type == "DISK"){
             Disk_Controller::Controller_Disk(sms);

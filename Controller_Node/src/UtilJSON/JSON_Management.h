@@ -44,6 +44,22 @@ public:
 
         }
     }
+    static string GetJSONStringArray(string key, const string& jsonString) {
+        rapidjson::Document document;
+        document.Parse<kParseDefaultFlags>(jsonString.c_str());
+        const char* searchedString;
+        if (document.HasMember(key.c_str())) {
+            if (document[key.c_str()].IsString()) {
+                searchedString = document[key.c_str()].GetString();
+                return searchedString;
+            }
+        }
+        else {
+            cout << "ERROR : KEY NOT FOUND" << endl;
+            return " ";
+
+        }
+    }
     /**
    * @brief Method that serializes a TypeMessage.h method to a JSON string
    * @param typemessageObject is the TypeMessage.h object that contains all the information
@@ -123,25 +139,24 @@ public:
     * @brief Method that serializes a Huffman_pair.h object using a writer object
     * @param writer object used for serializing object and huffmanObject is the Huffman_pair.h object
     */
-    static SimplyLinkedList<Huffman_pair*>* DeserializeHuffmanJSONArray(const string &s){
+    static Huffman_Message *DeserializetoHuffmanMessage(const string &s){
         rapidjson::Document doc;
-        auto list = new SimplyLinkedList<Huffman_pair*>();
+        auto huffmanMessageObject = new Huffman_Message();
         doc.Parse(s.c_str());
-        if (!doc.IsArray())
-            return list;
-        for (rapidjson::Value::ConstValueIterator itr = doc.Begin(); itr != doc.End(); ++itr) {
-            auto *huffman = new Huffman_pair();
-            DeserializeHuffman_Pair(*itr, huffman);
-            list->append(huffman);
+
+        huffmanMessageObject->setCompress_Code(doc["Code"].GetString());
+        Value& huffmanTable = doc["HuffmanTable"];
+        assert(huffmanTable.IsArray());
+        for (SizeType i = 0; i < huffmanTable.Size(); i++) {
+            auto huffman = new Huffman_pair();
+            huffman->setCH(huffmanTable[i]["huffman_ch"].GetString()[0]);
+            huffman->setCode(huffmanTable[i]["huffman_codes"].GetString());
+            huffmanMessageObject->getHuffman_Table()->append(huffman);
+
         }
-        return list;
+        return huffmanMessageObject;
     }
 
-    static void DeserializeHuffman_Pair(const rapidjson::Value &obj, Huffman_pair * pair){
-        string var = obj["huffman_Ch"].GetString();
-        pair->setCode(obj["huffman_codes"].GetString());
-        pair->setCH(var[1]);
-    }
 
 };
 #endif //TEC_FS_JSON_MANAGEMENT_H
