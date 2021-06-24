@@ -130,14 +130,12 @@ public:
                     }else{
                         if(bytesReceived > 0){
                             cout<< "Client["<< i << "]:" << string(buffer,0,bytesReceived) << endl;
-
                             string message = string(buffer,0,bytesReceived);
+                            cout<<"SOY EL MENSAJE  ----->  " << message <<  endl;
                             string str = JSON_Management::GetJSONString("Code",message);
                             string table = JSON_Management::GetJSONString("HuffmanTable",message);
-                            /**
-                             * AQUI QUEDE CON LA PROGRA FALTA HACER EL DESERIALIZADOR
-
-                            string msg = HuffmanCompression::Decode_Huffman(str,);
+                            SimplyLinkedList<Huffman_pair*>* h_table = JSON_Management::DeserializeHuffmanJSONArray(table);
+                            string msg = HuffmanCompression::Decode_Huffman(str,h_table);
                             string first = JSON_Management::GetJSONString("First_Time", msg);
                             string type1  = JSON_Management::GetJSONString("Client_Type", msg);
                             if(first == "TRUE"){
@@ -146,7 +144,7 @@ public:
                             }else{
                                 Identify_Controller(type1,message);
                             }
-                             */
+
                             send(clientSocket[i],buffer, strlen(buffer),0);
                         }
 

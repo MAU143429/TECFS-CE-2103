@@ -19,7 +19,7 @@ void mainv2(){
     pair<string,SimplyLinkedList<Huffman_pair*>*> print;
     print = HuffmanCompression::buildHuffmanTree(prueba);
     string mau = HuffmanCompression::Decode_Huffman(print.first,print.second);
-    cout << "SOY EL STRING MAU" << mau << endl;
+    
 }
 int main() {
 

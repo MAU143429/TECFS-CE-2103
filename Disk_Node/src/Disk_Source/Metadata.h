@@ -19,7 +19,7 @@ public:
     }
 
     void setName(const string &newname) {
-        TypeMessage::name = newname;
+        MetaData::name = newname;
     }
 
 };

@@ -13,6 +13,8 @@ using namespace std;
 class Disk_Manager
 {
 public:
+    static string Disk_Path;
+    static bool B1,B2,B3,B4,B5,B6,B7,B8;
     static void InitDisk(string path){
 
         auto block1 = new Block;
@@ -31,6 +33,23 @@ public:
         block6->InitBlock(6,path);
         block7->InitBlock(7,path);
         block8->InitBlock(8,path);
+        B1 = true;
+        B2 = true;
+        B3 = true;
+        B4 = true;
+        B5 = true;
+        B6 = true;
+        B7 = true;
+        B8 = true;
+
+
+    }
+    static void Save_Info(const string& jsonstring){
+
+        string save_sms = JSON_Management::GetJSONString("CODE",jsonstring);
+
+
+
 
     }
 

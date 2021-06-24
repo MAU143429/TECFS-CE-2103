@@ -5,6 +5,7 @@
 #ifndef DISK_NODE_BOOK_H
 #define DISK_NODE_BOOK_H
 #include <iostream>
+#include <fstream>
 #include "../../../lib/DataStructures/SimplyList.h"
 
 using namespace std;
@@ -12,15 +13,30 @@ using namespace std;
 class Book
 {
 private:
-    string name;
+    ofstream book;
+    string path;
 public:
-    const string &getName() const {
-        return name;
+
+    void setBook(const string &newbook) {
+        path = newbook;
+        book.open(newbook);
+        book.close();
     }
 
-    void setName(const string &newname) {
-        TypeMessage::name = newname;
+    void Write(const string &newtxt){
+        book.open(Book::path);
+        book << newtxt;
+        book.close();
+
     }
+    string Read(){
+        ifstream RFile(Book::path);
+        string output;
+        getline(RFile,output);
+        return output;
+    }
+
+
 
 };
 #endif //DISK_NODE_BOOK_H

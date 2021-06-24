@@ -29,6 +29,7 @@ static void Send(const char *msg) {
         final_sms->getHuffman_Table()->append(compressed.second->get(i));
     }
     string final = JSON_Management::HuffmanMessageToJSON(final_sms);
+    cout<<"SOY EL MENSAJE QUE SE VA A ENVIAR " << final <<endl;
     int sendRes = send(clientSocket, final.c_str(), strlen(msg), 0);
     if (sendRes == -1) {
         std::cout << "SEND MESSAGE FAILED " << std::endl;
