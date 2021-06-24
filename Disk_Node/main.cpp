@@ -6,27 +6,17 @@
 #include "src/Disk_Source/Disk_Manager.h"
 
 static string PATH;
+static string DISK;
 
-void RunClient() {
-    InitClient();
+void RunClient(const string& client) {
+    InitClient(client);
 
 }
 
-void RunDisks(const string& client, const string& path){
+void RunDisks(const string& path){
     Disk_Manager::InitDisk(path);
     PATH = path;
-    auto Connect_sms = new TypeMessage();
-    Connect_sms->setClient("DISK");
-    Connect_sms->setFirst("TRUE");
-    if(client == "1"){
-        Connect_sms->setSpecific("D1");
-    }else if(client == "2"){
-        Connect_sms->setSpecific("D2");
-    }else{
-        Connect_sms->setSpecific("P1");
-    }
-    string newjson = JSON_Management::TypeMessageToJSON(Connect_sms);
-    Send(newjson.c_str());
+
 }
 
 int main() {
@@ -40,9 +30,10 @@ int main() {
     cout<< "Define the path of the Disk: " ;
     getline(cin, userInput2);
     client = userInput;
+    DISK = userInput;
     newpath = userInput2;
-    thread runs(RunClient);
-    thread runs2(RunDisks, client, newpath);
+    thread runs(RunClient,client);
+    thread runs2(RunDisks, newpath);
     runs.join();
     runs2.join();
     return 0;

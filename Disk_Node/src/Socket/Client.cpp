@@ -35,7 +35,7 @@ static void Send(const char *msg) {
         std::cout << "SEND MESSAGE FAILED " << std::endl;
     }
 }
-int InitClient()
+int InitClient(string client)
 {
     int port;
     if(clientSocket == -1){
@@ -55,6 +55,20 @@ int InitClient()
     if(connectRes == 0){
         cout<< "You have connect to server !" << endl;
     }
+
+    auto Connect_sms = new TypeMessage();
+    Connect_sms->setClient("DISK");
+    Connect_sms->setFirst("TRUE");
+    if(client == "1"){
+        Connect_sms->setSpecific("D1");
+    }else if(client == "2"){
+        Connect_sms->setSpecific("D2");
+    }else{
+        Connect_sms->setSpecific("P1");
+    }
+    string newjson = JSON_Management::TypeMessageToJSON(Connect_sms);
+    Send(newjson.c_str());
+
 
     if(connectRes == -1){
         return 1;
