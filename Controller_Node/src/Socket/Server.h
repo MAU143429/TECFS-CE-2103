@@ -160,6 +160,21 @@ public:
 
 
     }
+    static void Send(int clientSocket, const char *msg) {
+        pair<string,SimplyLinkedList<Huffman_pair*>*> compressed;
+        compressed = HuffmanCompression::buildHuffmanTree(msg);
+        auto final_sms = new Huffman_Message();
+        final_sms->setCompress_Code(compressed.first);
+        for (int i = 0; i < compressed.second->getLen(); ++i) {
+            final_sms->getHuffman_Table()->append(compressed.second->get(i));
+        }
+        string final = JSON_Management::HuffmanMessageToJSON(final_sms);
+        cout << final;
+        int sendRes = send(clientSocket, final.c_str(), final.size()+1, 0);
+        if (sendRes == -1) {
+            std::cout << "SEND MESSAGE FAILED " << std::endl;
+        }
+    }
 
     static void Identify_Client(const string& client, const string& specific,int num){
 
