@@ -70,9 +70,13 @@ public:
             response->setClient("DISK");
             response->setBinaryCode(binary_code);
             response->setSave("FALSE");
+            string result = JSON_Management::TypeMessageToJSON(response);
+            Client::getInstance()->Send(result.c_str());
         }
 
         /**
+         *
+         *
          * ACA SE DEBE BEVOLVER UN MENSAJE AL SERVIDOR
          */
 

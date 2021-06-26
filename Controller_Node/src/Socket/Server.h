@@ -22,6 +22,12 @@
 using namespace std;
 class Server{
 public:
+
+    static int Disk1_Client;
+    static int Disk2_Client;
+    static int Parity_Disk_Client;
+    static int App_Client;
+
     [[noreturn]] static void InitServer()
     {
         int clientSocket[30];
@@ -176,11 +182,6 @@ public:
     }
 
     static void Identify_Client(const string& client, const string& specific,int num){
-
-        static int Disk1_Client;
-        static int Disk2_Client;
-        static int Parity_Disk_Client;
-        static int App_Client;
 
         if(client == "DISK"){
             if(specific == "D1"){

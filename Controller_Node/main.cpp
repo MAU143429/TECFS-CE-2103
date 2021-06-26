@@ -13,12 +13,8 @@ void RunServer() {
 }
 
 void mainv2(){
-    auto newSMS = new TypeMessage();
-    newSMS->setMessage("SOY EL STRING DE PRUEBA DE PALABRA");
-    string prueba = JSON_Management::TypeMessageToJSON(newSMS);
-    pair<string,SimplyLinkedList<Huffman_pair*>*> print;
-    print = HuffmanCompression::buildHuffmanTree(prueba);
-    string mau = HuffmanCompression::Decode_Huffman(print.first,print.second);
+
+
     
 }
 int main() {

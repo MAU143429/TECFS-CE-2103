@@ -9,7 +9,7 @@ static string PATH;
 static string DISK;
 
 void RunClient(const string& client) {
-    InitClient(client);
+    Client::getInstance()->InitClient(client);
 
 }
 

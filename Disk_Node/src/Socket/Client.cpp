@@ -1,26 +1,25 @@
 //
 // Created by mau on 6/14/21.
 //
-#include <unistd.h>
-#include <cstdio>
-#include <sys/socket.h>
-#include <cstdlib>
-#include <netinet/in.h>
-#include <cstring>
-#include <iostream>
-#include <pthread.h>
-#include <arpa/inet.h>
-#include "../Objects/Huffman_Message.h"
-#include "../../../lib/DataStructures/SimplyList.h"
-#include "../UtilJSON/JSON_Management.h"
-#include "../Algorithms/HuffmanCompression.h"
 
+#include "Client.h"
 
-using namespace std;
+Client* Client::unique_instance {nullptr};
+mutex Client::mutex_;
 
-int clientSocket = socket(AF_INET,SOCK_STREAM,0);
+Client::Client() {}
+Client::~Client() {}
+/**
+ * @brief Getter for the unique instance of the client
+ * @return the client instance
+ */
+Client *Client::getInstance() {
+    lock_guard<std::mutex> lock(mutex_);
+    if (unique_instance == nullptr){unique_instance = new Client();}
+    return unique_instance;
+}
 
-static void Send(const char *msg) {
+void Client::Send(const char *msg) {
     pair<string,SimplyLinkedList<Huffman_pair*>*> compressed;
     compressed = HuffmanCompression::buildHuffmanTree(msg);
     auto final_sms = new Huffman_Message();
@@ -35,7 +34,7 @@ static void Send(const char *msg) {
         std::cout << "SEND MESSAGE FAILED " << std::endl;
     }
 }
-int InitClient(string client)
+int Client::InitClient(string client)
 {
     int port;
     if(clientSocket == -1){
