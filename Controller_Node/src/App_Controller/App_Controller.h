@@ -28,6 +28,9 @@ public:
 
     static void  Extract_txt(const string& jsonString){
 
+        string tag =  JSON_Management::GetJSONString("Keyword", jsonString);
+
+
         /**
          * solicita a los 3 discos la informacion de un archivo en especifico
          */
@@ -92,9 +95,9 @@ public:
             d1 = binary_code[i];
             d2 = binary_code[i+1];
             if(d1 == '1' && d2 == '0' or d1 == '0' && d2 == '1'){
-                p3 = '1';
-            }else if(d1 == '1' && d2 == '1' or d1 == '0' && d2 == '0'){
                 p3 = '0';
+            }else if(d1 == '1' && d2 == '1' or d1 == '0' && d2 == '0'){
+                p3 = '1';
             }
 
             DISK1_INFO.push_back(d1);
@@ -104,7 +107,17 @@ public:
         }
     }
 
+    static string Build_files(string code1,string code2){
+        char c1,c2;
+        string result;
+        for (int i = 0; i < code1.length(); ++i) {
+            c1 = code1[i];
+            c2 = code2[i];
+            result += (c1+c2);
+        }
+        return result;
 
+    }
 };
 
 #endif //TEC_FS_APP_CONTROLLER_H
