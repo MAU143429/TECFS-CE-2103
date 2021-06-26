@@ -10,11 +10,10 @@ using namespace std;
 
 void RunServer() {
     cout << "Server is running" << endl;
-    Server::InitServer();
+    //Server::InitServer();
 }
 
 void mainv2(){
-
 
 }
 int main() {
