@@ -14,37 +14,41 @@
 
 using namespace std;
 
+MetaData *metadata;
+Book *book;
 
 class Block
 {
-
 public:
 
     static string file_path;
-
-
+    static bool inUse;
 
     static void InitBlock(int num_block,string path){
 
-        auto metadata = new MetaData();
-        auto book = new Book();
+        inUse = false;
+        metadata = new MetaData();
+        book = new Book();
         string file = (path +"block" + to_string(num_block)+".txt");
         book->setBook(file);
-
-
-
     }
-
     static void Write(string newtxt){
-        //book->Write(newtxt);
+        book->Write(newtxt);
     }
 
     static string Read(){
         string result;
-        //result = book->Read();
+        result = book->Read();
         return result;
     }
 
+    static string getMetadata(){
+        metadata->getName();
+    }
+
+    static void setMetadata(string newdata){
+        metadata->setName(newdata);
+    }
 
 };
 

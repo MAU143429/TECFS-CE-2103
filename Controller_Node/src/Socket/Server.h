@@ -20,9 +20,13 @@
 #define TRUE 1
 
 using namespace std;
+static int Disk1_Client;
+static int Disk2_Client;
+static int Parity_Disk_Client;
+static int App_Client;
+
 class Server{
 public:
-
 
 
     [[noreturn]] static void InitServer()
@@ -133,27 +137,21 @@ public:
                     }else{
                         if(bytesReceived > 0){
                             cout<< "Client["<< i << "]:" << string(buffer,0,bytesReceived) << endl;
-
                             string message = string(buffer,0,bytesReceived);
-                            cout << "Soy el message" << " " << message << endl;
                             auto huffmanMessage = new Huffman_Message();
                             huffmanMessage = JSON_Management::DeserializetoHuffmanMessage(message);
-
                             string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
                             string first = JSON_Management::GetJSONString("First_Time", msg);
                             string type1  = JSON_Management::GetJSONString("Client_Type", msg);
-                            string prueba = JSON_Management::GetJSONString("Path",msg);
-                            cout<< "Soy el largo del path:"<< prueba.size()<<"\n";
                             if(first == "TRUE"){
                                 string type2 =  JSON_Management::GetJSONString("Specific_Type", msg);
                                 Identify_Client(type1,type2,i);
                             }else{
-                                Identify_Controller(type1,message);
+                                string type2 =  JSON_Management::GetJSONString("Specific_Type", msg);
+                                Identify_Controller(type1,type2,message);
                             }
 
-                            send(clientSocket[i],buffer, strlen(buffer),0);
                         }
-
 
                     }
 
@@ -181,11 +179,6 @@ public:
 
     static void Identify_Client(const string& client, const string& specific,int num){
 
-        static int Disk1_Client;
-        static int Disk2_Client;
-        static int Parity_Disk_Client;
-        static int App_Client;
-
         if(client == "DISK"){
             if(specific == "D1"){
                 Disk1_Client = num;
@@ -203,12 +196,37 @@ public:
         }
     }
 
-    static void Identify_Controller(const string& type,const string& sms){
+    static void Identify_Controller(const string& type,string specific,const string& sms){
 
         if(type == "DISK"){
-            Disk_Controller::Controller_Disk(sms);
+            if(specific == "D1"){
+                Disk_Controller::Controller_Disk(sms);
+            }else if(specific == "D2"){
+                Disk_Controller::Controller_Disk(sms);
+            }else if(specific == "P1"){
+                Disk_Controller::Controller_Disk(sms);
+            }
         }else {
-            App_Controller::Controller_App(sms);
+            string tag =  JSON_Management::GetJSONString("Request", sms);
+            if(tag == "SAVE"){
+                App_Controller::Save_Info(sms);
+            }else if(tag == "OPEN"){
+                App_Controller::Extract_txt(sms);
+            }else{
+                auto response = new AppMessage();
+                string kw =  JSON_Management::GetJSONString("Keyword", sms);
+                auto s_request = App_Controller::Search_Words(kw);
+                response->setKwB1(s_request->get(0));
+                response->setKwB2(s_request->get(1));
+                response->setKwB3(s_request->get(2));
+                response->setKwB4(s_request->get(3));
+                response->setKwB5(s_request->get(4));
+                response->setKwB6(s_request->get(5));
+                response->setKwB7(s_request->get(6));
+                response->setKwB8(s_request->get(7));
+                string result = JSON_Management::AppMessageToJSON(response);
+                Send(App_Client,result.c_str());
+            }
         }
     }
 };

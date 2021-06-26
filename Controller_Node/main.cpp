@@ -4,6 +4,7 @@
 #include "src/Objects/Huffman_Message.h"
 #include "src/UtilJSON/JSON_Management.h"
 #include "src/Socket/Server.h"
+#include "src/Algorithms/BinaryConverter.h"
 
 using namespace std;
 
@@ -15,7 +16,6 @@ void RunServer() {
 void mainv2(){
 
 
-    
 }
 int main() {
 
