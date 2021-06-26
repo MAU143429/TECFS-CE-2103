@@ -13,8 +13,24 @@ using namespace std;
 class TypeMessage
 {
 private:
-    string first,client,specific;
+    string first,client,specific,save,binary_code;
 public:
+    const string &getBinaryCode() const {
+        return binary_code;
+    }
+
+    void setBinaryCode(const string &binaryCode) {
+        binary_code = binaryCode;
+    }
+
+    const string &getSave() const {
+        return save;
+    }
+
+    void setSave(const string &save) {
+        TypeMessage::save = save;
+    }
+
     const string &getClient() const {
         return client;
     }

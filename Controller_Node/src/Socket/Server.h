@@ -137,7 +137,6 @@ public:
                             huffmanMessage = JSON_Management::DeserializetoHuffmanMessage(message);
 
                             string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
-                            cout << "SOY EL MESAJEJE  " << " "<< msg << endl;
                             string first = JSON_Management::GetJSONString("First_Time", msg);
                             string type1  = JSON_Management::GetJSONString("Client_Type", msg);
 

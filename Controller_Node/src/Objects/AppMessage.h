@@ -2,15 +2,15 @@
 // Created by njohnson on 6/13/21.
 //
 
-#ifndef TEC_FS_TYPEMESSAGE_H
-#define TEC_FS_TYPEMESSAGE_H
+#ifndef TEC_FS_APPMESSAGE_H
+#define TEC_FS_APPMESSAGE_H
 
 #include <iostream>
 #include "../../../lib/DataStructures/SimplyList.h"
 
 using namespace std;
 
-class TypeMessage
+class AppMessage
 {
 private:
     string message_to_send;
@@ -26,4 +26,4 @@ public:
 
 };
 
-#endif //TEC_FS_TYPEMESSAGE_H
+#endif //TEC_FS_APPMESSAGE_H

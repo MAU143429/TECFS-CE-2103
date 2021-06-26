@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include "../../../lib/DataStructures/SimplyList.h"
+//#include "../Socket/Client.cpp"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ public:
         path = newbook;
         book.open(newbook);
         book.close();
+
     }
 
     void Write(const string &newtxt){
