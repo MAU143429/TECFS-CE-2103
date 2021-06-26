@@ -4,9 +4,12 @@
 
 #ifndef TEC_FS_APP_CONTROLLER_H
 #define TEC_FS_APP_CONTROLLER_H
+
+#include "../../../lib/DataStructures/SimplyList.h"
+
 using namespace std;
 
-
+static SimplyLinkedList<string> *stringList = new SimplyLinkedList<string>();
 class App_Controller{
 
 public:
@@ -24,10 +27,26 @@ public:
     }
     static SimplyLinkedList<string>* Search_Words(string keyword) {
 
-        // kw = mate
-        
-        //[tomo1,  tomo2  ,ciencias7 ]
-        //["","",ciencias7,"",""'','''',""]
+        auto tempList = new SimplyLinkedList<string>();
+        string empty = "";
+        addToList();
+        for (int i = 0; i < stringList->getLen(); ++i) {
+            string stringCompare = stringList->get(i);
+            if (stringCompare.find(keyword) != string::npos) {
+                tempList->append(stringCompare);
+            }else{
+                tempList->append(empty);
+            }
+        }
+        return tempList;
+    }
+    static void addToList(){
+        stringList->append("tomo1");
+        stringList->append("tomo2");
+        stringList->append("Ciencias");
+        stringList->append("Angosto se la come");
+        stringList->append("tomo cinco");
+
     }
 
     static string File_Decompression(const string& jsonString){
@@ -39,6 +58,7 @@ public:
 
 
     }
+
 
 };
 
