@@ -9,6 +9,8 @@
 #include "string"
 #include <iostream>
 #include "../Algorithms/BinaryConverter.h"
+#include <dirent.h>
+
 using namespace std;
 
 static SimplyLinkedList<string> *stringList = new SimplyLinkedList<string>();
@@ -20,9 +22,31 @@ class App_Controller{
 public:
 
     static void Save_Info(const string& jsonString){
-        string path = JSON_Management::GetJSONString("Path",jsonString);
 
-        //Sacar lista de txt en carpeta y procesarlo uno a uno
+        const char *path = JSON_Management::GetJSONString("Path", jsonString).c_str();
+
+        auto filesList = new SimplyLinkedList<string>();
+
+        DIR *dir;
+        struct dirent *file;
+        if ((dir = opendir(path)) != NULL) {
+            while ((file = readdir(dir)) != NULL) {
+                if ( !strcmp( file->d_name, "."   )) continue;
+                if ( !strcmp( file->d_name, ".."  )) continue;
+                filesList->append(file->d_name);
+            }
+            closedir (dir);
+        } else {
+            cout<<"No se pudo abrir el directorio\n";
+        }
+        for (int i = 0; i < filesList->getLen(); ++i) {
+
+            size_t lastindex = filesList->get(i).find_last_of(".");
+            stringList->append(filesList->get(i).substr(0, lastindex));
+
+            cout << filesList->get(i) << "\n";
+            cout << stringList->get(i) << "\n";
+        }
 
     }
 
@@ -66,16 +90,16 @@ public:
                 }else{
                     output += (":" + line);
                 }
-    static string File_Decompression(const string& jsonString){
-
             }
             newbook.close();
         }
-
         return output;
 
     }
 
+    static string File_Decompression(const string& jsonString){
+
+    }
     static string File_Compression(string text){
         string result;
         result = BinaryConverter::String_toBinary(text);
