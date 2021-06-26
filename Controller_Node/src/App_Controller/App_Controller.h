@@ -9,6 +9,7 @@
 #include "string"
 #include <iostream>
 #include "../Algorithms/BinaryConverter.h"
+#include "../UtilJSON/JSON_Management.h"
 #include <dirent.h>
 
 using namespace std;
@@ -56,6 +57,7 @@ public:
 
 
         /**
+         * QUEDE PROGRAMANDO AQUI
          * solicita a los 3 discos la informacion de un archivo en especifico
          */
     }

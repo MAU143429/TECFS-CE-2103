@@ -1,7 +1,6 @@
 //
 // Created by mau on 6/14/21.
 //
-
 #ifndef TEC_FS_SERVER_H
 #define TEC_FS_SERVER_H
 #include <unistd.h>
@@ -15,6 +14,8 @@
 #include <arpa/inet.h>
 #include "../App_Controller/App_Controller.h"
 #include "../DiskNodes_Controller/Disk_Controller.h"
+#include "../UtilJSON/JSON_Management.h"
+#include "../Algorithms/HuffmanCompression.h"
 
 
 #define TRUE 1
@@ -26,10 +27,29 @@ static int Parity_Disk_Client;
 static int App_Client;
 
 class Server{
+
+protected:
+    Server();
+    ~Server();
+private:
+    static Server* unique_instance;
+    static mutex mutex_;
 public:
 
+    static Server* getInstance();
+    /**
+     * @brief Method that doesn't let the server instance be cloneable.
+     */
+    void operator=(const Server &) = delete;
 
-    [[noreturn]] static void InitServer()
+    /**
+     * @brief Method that doesn't let the server be assignable.
+     * @param other
+     */
+    Server(Server &other) = delete;
+
+
+    [[noreturn]] void InitServer()
     {
         int clientSocket[30];
         int PORT;
@@ -161,7 +181,7 @@ public:
 
 
     }
-    static void Send(int clientSocket, const char *msg) {
+    void Send(int clientSocket, const char *msg) {
         pair<string,SimplyLinkedList<Huffman_pair*>*> compressed;
         compressed = HuffmanCompression::buildHuffmanTree(msg);
         auto final_sms = new Huffman_Message();
@@ -177,7 +197,7 @@ public:
         }
     }
 
-    static void Identify_Client(const string& client, const string& specific,int num){
+    void Identify_Client(const string& client, const string& specific,int num){
 
         if(client == "DISK"){
             if(specific == "D1"){
@@ -196,7 +216,7 @@ public:
         }
     }
 
-    static void Identify_Controller(const string& type,string specific,const string& sms){
+    void Identify_Controller(const string& type,string specific,const string& sms){
 
         if(type == "DISK"){
             if(specific == "D1"){
