@@ -23,10 +23,7 @@ using namespace std;
 class Server{
 public:
 
-    static int Disk1_Client;
-    static int Disk2_Client;
-    static int Parity_Disk_Client;
-    static int App_Client;
+
 
     [[noreturn]] static void InitServer()
     {
@@ -145,7 +142,8 @@ public:
                             string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
                             string first = JSON_Management::GetJSONString("First_Time", msg);
                             string type1  = JSON_Management::GetJSONString("Client_Type", msg);
-
+                            string prueba = JSON_Management::GetJSONString("Path",msg);
+                            cout<< "Soy el largo del path:"<< prueba.size()<<"\n";
                             if(first == "TRUE"){
                                 string type2 =  JSON_Management::GetJSONString("Specific_Type", msg);
                                 Identify_Client(type1,type2,i);
@@ -182,6 +180,11 @@ public:
     }
 
     static void Identify_Client(const string& client, const string& specific,int num){
+
+        static int Disk1_Client;
+        static int Disk2_Client;
+        static int Parity_Disk_Client;
+        static int App_Client;
 
         if(client == "DISK"){
             if(specific == "D1"){

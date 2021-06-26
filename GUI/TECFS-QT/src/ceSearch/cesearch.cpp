@@ -4,6 +4,8 @@
 #include "../Objects/TypeMessage.h"
 #include "../UtilJSON/JSON_Management.h"
 #include "../Algorithms/HuffmanCompression.h"
+#include "../Socket/Client.h"
+#include "../../../lib/DataStructures/SimplyList.h"
 
 ceSEARCH::ceSEARCH(QWidget *parent) :
     QMainWindow(parent),
@@ -36,13 +38,33 @@ void ceSEARCH::on_searchBtn_clicked()
         searchMsg->setClientType("APP");
 
         string jsonMsg = JSON_Management::TypeMessageToJSON(searchMsg);
-        pair<string,SimplyLinkedList<Huffman_pair*>*> compressed;
-        compressed = HuffmanCompression::buildHuffmanTree(jsonMsg);
-        auto huffmanMsg = new Huffman_Message();
-        huffmanMsg->setCompress_Code(compressed.first);
-        for (int i = 0; i < compressed.second->getLen(); ++i) {
-            huffmanMsg->getHuffman_Table()->append(compressed.second->get(i));
+        Client::getInstance()->Send(jsonMsg.c_str());
+
+        string response;
+        while(response.empty()){
+            response = Client::getInstance()->ReadString();
         }
-        string finalMsg = JSON_Management::HuffmanMessageToJSON(huffmanMsg);
+        Client::getInstance()->setResponse("");
+
+        auto huffmanMessage = new Huffman_Message();
+        huffmanMessage = JSON_Management::DeserializetoHuffmanMessage(response);
+        string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
+
+        auto blockBools = new SimplyLinkedList<bool>();
+        blockBools->append(false);
+        for (int i = 1; i < 9; ++i) {
+            if (JSON_Management::GetJSONString("KW_B"+to_string(i),response).size() > 0 ){
+                blockBools->append(true);
+            }else{
+                blockBools->append(false);
+            }
+        }
+        for (int i = 0; i < blockBools->getLen(); ++i) {
+            if(blockBools->get(i) == true){
+                string title = JSON_Management::GetJSONString("KW_B"+to_string(i),response);
+                //Agregar al listview
+            }
+        }
+
     }
 }

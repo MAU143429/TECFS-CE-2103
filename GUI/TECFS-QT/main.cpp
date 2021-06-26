@@ -4,7 +4,7 @@
 #include <QApplication>
 
 void RunClient() {
-    InitClient();
+    Client::getInstance()->InitClient();
 }
 int runGui(int argc, char *argv[])
 {
@@ -21,6 +21,8 @@ int main(int argc, char *argv[])
     thread main(RunClient);
     runs.join();
     main.join();
+
     return 0;
+
 }
 
