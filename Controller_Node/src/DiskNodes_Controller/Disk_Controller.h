@@ -18,7 +18,9 @@ public:
         string response = JSON_Management::GetJSONString("Save",jsonString);
         if(response  == "TRUE"){
             app_response->setStatus("TRUE");
-
+            /**
+             * ENVIAR MENSAJES DE CONFIRMACION DE GUARDADO
+             */
 
         }else{
             string binarycode = JSON_Management::GetJSONString("Save",jsonString);

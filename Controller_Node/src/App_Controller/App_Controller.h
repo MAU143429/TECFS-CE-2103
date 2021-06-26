@@ -4,9 +4,16 @@
 
 #ifndef TEC_FS_APP_CONTROLLER_H
 #define TEC_FS_APP_CONTROLLER_H
+#include <fstream>
+#include "string"
+#include <iostream>
+#include "../Algorithms/BinaryConverter.h"
 using namespace std;
 
 
+static string DISK1_INFO;
+static string DISK2_INFO;
+static string PARITY_DISK_INFO;
 class App_Controller{
 
 public:
@@ -20,24 +27,68 @@ public:
 
     static void  Extract_txt(const string& jsonString){
 
-
+        /**
+         * solicita a los 3 discos la informacion de un archivo en especifico
+         */
     }
     static SimplyLinkedList<string>* Search_Words(string keyword) {
 
-        // kw = mate
-        
-        //[tomo1,  tomo2  ,ciencias7 ]
-        //["","",ciencias7,"",""'','''',""]
-    }
-
-    static string File_Decompression(const string& jsonString){
-
 
     }
+    static string Read_File(string fullpath){
 
-    static string File_Compression(const string& jsonString){
+        ifstream newbook;
+        newbook.open(fullpath);
+        string line;
+        string output;
+        bool f1 = true;
+        if (newbook.is_open())
+        {
+            while ( getline (newbook,line) )
+            {
+                if(f1){
+                    output += (line);
+                    f1= false;
+                }else{
+                    output += (":" + line);
+                }
 
+            }
+            newbook.close();
+        }
 
+        return output;
+
+    }
+
+    static string File_Compression(string text){
+        string result;
+        result = BinaryConverter::String_toBinary(text);
+        return result;
+    }
+    static string File_Decompression(string text){
+        string result;
+        result = BinaryConverter::Binary_toString(text);
+        return result;
+    }
+
+    static void Divide_files(string binary_code){
+        int half = binary_code.size()/2;
+        char d1,d2,p3;
+        for (int i = 0; i < half; ++i) {
+            d1 = binary_code[i];
+            d2 = binary_code[i+1];
+            if(d1 == '1' && d2 == '0' or d1 == '0' && d2 == '1'){
+                p3 = '1';
+            }else if(d1 == '1' && d2 == '1' or d1 == '0' && d2 == '0'){
+                p3 = '0';
+            }
+
+            DISK1_INFO.push_back(d1);
+            DISK2_INFO.push_back(d2);
+            PARITY_DISK_INFO.push_back(p3);
+
+        }
     }
 
 };
