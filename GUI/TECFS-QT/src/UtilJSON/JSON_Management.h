@@ -93,6 +93,9 @@ public:
         writer.Key("Specific_Type");
         writer.String(message->getSpecificType().c_str());
 
+        writer.Key("Filename");
+        writer.String(message->getFileName().c_str());
+
         writer.EndObject();
 
         return buffer.GetString();

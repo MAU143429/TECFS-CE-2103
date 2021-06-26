@@ -21,8 +21,15 @@ private:
     string firstTime;
     string clientType;
     string specificType;
-
+    string fileName;
 public:
+    const string &getFileName() const {
+        return fileName;
+    }
+
+    void setFileName(const string &fileName) {
+        TypeMessage::fileName = fileName;
+    }
 
     const string &getAppName() const {
         return appName;
