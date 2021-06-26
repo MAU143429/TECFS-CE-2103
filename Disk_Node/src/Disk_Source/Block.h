@@ -39,7 +39,7 @@ public:
         //book->Write(newtxt);
     }
 
-    static string Read(string newtxt){
+    static string Read(){
         string result;
         //result = book->Read();
         return result;

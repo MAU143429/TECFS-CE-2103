@@ -15,6 +15,14 @@ public:
 
     static void Controller_Disk(const string& jsonString){
 
+        string response = JSON_Management::GetJSONString("Save",jsonString);
+
+        if(response  == "TRUE"){
+
+
+
+
+        }
 
 
     }

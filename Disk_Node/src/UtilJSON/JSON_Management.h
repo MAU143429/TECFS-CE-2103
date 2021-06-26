@@ -68,6 +68,12 @@ public:
         writer.Key("Specific_Type");
         writer.String(message->getSpecific().c_str());
 
+        writer.Key("Save");
+        writer.String(message->getSave().c_str());
+
+        writer.Key("Binary");
+        writer.String(message->getBinaryCode().c_str());
+
         writer.EndObject();
 
         return buffer.GetString();

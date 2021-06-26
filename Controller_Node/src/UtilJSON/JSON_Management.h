@@ -11,7 +11,8 @@
 #include "../../../lib/rapidjson/writer.h"
 #include "../../../lib/rapidjson/document.h"
 #include "../../../lib/DataStructures/SimplyList.h"
-#include "../Objects/TypeMessage.h"
+#include "../Objects/AppMessage.h"
+#include "../Objects/DiskMessage.h"
 #include "../Objects/Huffman_Message.h"
 #include "../Objects/Huffman_pair.h"
 
@@ -61,11 +62,40 @@ public:
         }
     }
     /**
-   * @brief Method that serializes a TypeMessage.h method to a JSON string
-   * @param typemessageObject is the TypeMessage.h object that contains all the information
+   * @brief Method that serializes a DiskMessage.h method to a JSON string
+   * @param DIskmessageObject is the TypeMessage.h object that contains all the information
    * @return the serialized object into a JSON string
    */
-    static string TypeMessageToJSON(TypeMessage* message){
+    static string DiskMessageToJSON(DiskMessage* message){
+        Document json_document;
+        StringBuffer buffer;
+
+        Document::AllocatorType& allocator = json_document.GetAllocator();
+
+        Writer<rapidjson::StringBuffer> writer(buffer);
+
+        writer.StartObject();
+
+        writer.Key("Binary_Script");
+        writer.String(message->getBinary_Code().c_str());
+
+        writer.Key("Request");
+        writer.String(message->getRequest().c_str());
+
+        writer.Key("Filename");
+        writer.String(message->getFilename().c_str());
+
+        writer.EndObject();
+
+        return buffer.GetString();
+    }
+
+    /**
+* @brief Method that serializes a AppMessage.h method to a JSON string
+* @param AppmessageObject is the AppMessage.h object that contains all the information
+* @return the serialized object into a JSON string
+*/
+    static string AppMessageToJSON(AppMessage *message){
         Document json_document;
         StringBuffer buffer;
 
