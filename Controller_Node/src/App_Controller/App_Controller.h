@@ -39,7 +39,6 @@ public:
 
         auto tempList = new SimplyLinkedList<string>();
         string empty = "";
-        addToList();
         for (int i = 0; i < stringList->getLen(); ++i) {
             string stringCompare = stringList->get(i);
             if (stringCompare.find(keyword) != string::npos) {
