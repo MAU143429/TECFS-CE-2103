@@ -19,17 +19,13 @@ public:
         string output;
         while(sstream.good())
         {
-            bitset<7> bits;
+            bitset<8> bits;
             sstream >> bits;
-            cout << "SOY BITS" << bits <<endl;
-            if(bits == 1000001){
-                output += "_";
-            }else{
-                char c = char(bits.to_ulong());
-                output += c;
-            }
-
+            cout << "SOY BITS  ---> " << bits <<endl;
+            char c = char(bits.to_ulong());
+            output += c;
         }
+
         output.erase(prev(output.end()));
         cout << output;
         return output;
@@ -38,31 +34,16 @@ public:
 
     static string String_toBinary(string txt){
 
-        int n = txt.length();
         string result;
-        for (int i = 0; i <= n; i++)
+        bitset<8> bits;
+        for (std::size_t i = 0; i < txt.size(); ++i)
         {
-            // convert each char to
-            // ASCII value
-            int val = int(txt[i]);
-
-            // Convert ASCII value to binary
-            string bin = "";
-            while (val > 0)
-            {
-                (val % 2)? bin.push_back('1') :
-                bin.push_back('0');
-                val /= 2;
-            }
-            reverse(bin.begin(), bin.end());
-
-            cout << bin << " ";
-            result = result+bin;
+            cout << bitset<8>(txt.c_str()[i]) << endl;
+            bits = bitset<8>(txt.c_str()[i]);
+            result += bits.to_string();
         }
         return result;
-
     }
-
 
 };
 #endif //TEC_FS_BINARYCONVERTER_H

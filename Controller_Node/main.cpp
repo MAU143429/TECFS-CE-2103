@@ -10,15 +10,12 @@ using namespace std;
 
 void RunServer() {
     cout << "Server is running" << endl;
-    //Server::InitServer();
+    Server::InitServer();
 }
 
 void mainv2(){
 
-    string codify = BinaryConverter::String_toBinary("HOLA CEROBOT");
-    cout << "\n" << codify << endl;
-    string decodify = BinaryConverter::Binary_toString(codify);
-    cout << "\n" << decodify << endl;
+
 }
 int main() {
 

@@ -105,8 +105,32 @@ public:
 
         writer.StartObject();
 
-        writer.Key("Message");
-        writer.String(message->getMessage().c_str());
+        writer.Key("Save_Status");
+        writer.String(message->getStatus().c_str());
+
+        writer.Key("KW_B1");
+        writer.String(message->getKwB1().c_str());
+
+        writer.Key("KW_B2");
+        writer.String(message->getKwB2().c_str());
+
+        writer.Key("KW_B3");
+        writer.String(message->getKwB3().c_str());
+
+        writer.Key("KW_B4");
+        writer.String(message->getKwB4().c_str());
+
+        writer.Key("KW_B5");
+        writer.String(message->getKwB5().c_str());
+
+        writer.Key("KW_B6");
+        writer.String(message->getKwB6().c_str());
+
+        writer.Key("KW_B7");
+        writer.String(message->getKwB7().c_str());
+
+        writer.Key("KW_B8");
+        writer.String(message->getKwB8().c_str());
 
         writer.EndObject();
 

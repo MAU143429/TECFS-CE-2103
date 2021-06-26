@@ -153,7 +153,6 @@ public:
 
                         }
 
-
                     }
 
                 }
@@ -208,7 +207,26 @@ public:
                 Disk_Controller::Controller_Disk(sms);
             }
         }else {
-            App_Controller::Controller_App(sms);
+            string tag =  JSON_Management::GetJSONString("Request", sms);
+            if(tag == "SAVE"){
+                App_Controller::Save_Info(sms);
+            }else if(tag == "OPEN"){
+                App_Controller::Extract_txt(sms);
+            }else{
+                auto response = new AppMessage();
+                string kw =  JSON_Management::GetJSONString("Keyword", sms);
+                auto s_request = App_Controller::Search_Words(kw);
+                response->setKwB1(s_request->get(0));
+                response->setKwB2(s_request->get(1));
+                response->setKwB3(s_request->get(2));
+                response->setKwB4(s_request->get(3));
+                response->setKwB5(s_request->get(4));
+                response->setKwB6(s_request->get(5));
+                response->setKwB7(s_request->get(6));
+                response->setKwB8(s_request->get(7));
+                string result = JSON_Management::AppMessageToJSON(response);
+                Send(App_Client,result.c_str());
+            }
         }
     }
 };
