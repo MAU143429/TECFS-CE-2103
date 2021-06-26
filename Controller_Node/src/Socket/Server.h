@@ -20,13 +20,14 @@
 #define TRUE 1
 
 using namespace std;
+static int Disk1_Client;
+static int Disk2_Client;
+static int Parity_Disk_Client;
+static int App_Client;
+
 class Server{
 public:
 
-    static int Disk1_Client;
-    static int Disk2_Client;
-    static int Parity_Disk_Client;
-    static int App_Client;
 
     [[noreturn]] static void InitServer()
     {
@@ -136,24 +137,20 @@ public:
                     }else{
                         if(bytesReceived > 0){
                             cout<< "Client["<< i << "]:" << string(buffer,0,bytesReceived) << endl;
-
                             string message = string(buffer,0,bytesReceived);
-                            cout << "Soy el message" << " " << message << endl;
                             auto huffmanMessage = new Huffman_Message();
                             huffmanMessage = JSON_Management::DeserializetoHuffmanMessage(message);
-
                             string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
                             string first = JSON_Management::GetJSONString("First_Time", msg);
                             string type1  = JSON_Management::GetJSONString("Client_Type", msg);
-
                             if(first == "TRUE"){
                                 string type2 =  JSON_Management::GetJSONString("Specific_Type", msg);
                                 Identify_Client(type1,type2,i);
                             }else{
-                                Identify_Controller(type1,message);
+                                string type2 =  JSON_Management::GetJSONString("Specific_Type", msg);
+                                Identify_Controller(type1,type2,message);
                             }
 
-                            send(clientSocket[i],buffer, strlen(buffer),0);
                         }
 
 
@@ -200,10 +197,16 @@ public:
         }
     }
 
-    static void Identify_Controller(const string& type,const string& sms){
+    static void Identify_Controller(const string& type,string specific,const string& sms){
 
         if(type == "DISK"){
-            Disk_Controller::Controller_Disk(sms);
+            if(specific == "D1"){
+                Disk_Controller::Controller_Disk(sms);
+            }else if(specific == "D2"){
+                Disk_Controller::Controller_Disk(sms);
+            }else if(specific == "P1"){
+                Disk_Controller::Controller_Disk(sms);
+            }
         }else {
             App_Controller::Controller_App(sms);
         }

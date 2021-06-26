@@ -18,10 +18,11 @@
 #include "../Objects/Huffman_Message.h"
 #include "../Algorithms/HuffmanCompression.h"
 #include "../UtilJSON/JSON_Management.h"
+#include "../Disk_Source/Disk_Manager.h"
 
 using namespace std;
 
-static int clientSocket = socket(AF_INET,SOCK_STREAM,0);
+
 
 class Client {
 protected:
@@ -32,12 +33,16 @@ protected:
 private:
     static Client *unique_instance;
     static mutex mutex_;
+    string client_message;
+    string NUM_CLIENT;
+
 public:
+    int clientSocket = socket(AF_INET,SOCK_STREAM,0);
     static Client *getInstance();
 
-    static int InitClient(string client);
+    int InitClient(string client);
 
-    static void Send(const char *msg);
+    void Send(const char *msg);
 
     void operator=(const Client &) = delete;
 

@@ -36,6 +36,7 @@ void Client::Send(const char *msg) {
 }
 int Client::InitClient(string client)
 {
+    NUM_CLIENT = client;
     int port;
     if(clientSocket == -1){
         return 1;
@@ -95,8 +96,12 @@ int Client::InitClient(string client)
         }
         else
         {
-            //		Display response
-            cout << "SERVER> " << string(buf, bytesReceived) << "\r\n";
+            client_message = string(buf, 0, bytesReceived);
+            if(!client_message.empty()){
+                const string &response = Disk_Manager::Select_Request(client_message,NUM_CLIENT);
+                Send(response.c_str());
+
+            }
         }
 
     }while(true);

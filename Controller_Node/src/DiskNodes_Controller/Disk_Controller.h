@@ -20,8 +20,8 @@ public:
         if(response  == "TRUE"){
 
 
-
-
+        }else{
+            string binarycode = JSON_Management::GetJSONString("Save",jsonString);
         }
 
 

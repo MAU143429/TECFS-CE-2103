@@ -44,6 +44,23 @@ public:
 
         }
     }
+
+    static string GetJSONStringArray(string key, const string& jsonString) {
+        rapidjson::Document document;
+        document.Parse<kParseDefaultFlags>(jsonString.c_str());
+        const char* searchedString;
+        if (document.HasMember(key.c_str())) {
+            if (document[key.c_str()].IsString()) {
+                searchedString = document[key.c_str()].GetString();
+                return searchedString;
+            }
+        }
+        else {
+            cout << "ERROR : KEY NOT FOUND" << endl;
+            return " ";
+
+        }
+    }
     /**
    * @brief Method that serializes a TypeMessage.h method to a JSON string
    * @param typemessageObject is the TypeMessage.h object that contains all the information
@@ -130,6 +147,28 @@ public:
         writer->String(huffmanObject->getCode().c_str());
 
         writer->EndObject();
+    }
+
+    /**
+    * @brief Method that serializes a Huffman_pair.h object using a writer object
+    * @param writer object used for serializing object and huffmanObject is the Huffman_pair.h object
+    */
+    static Huffman_Message *DeserializetoHuffmanMessage(const string &s){
+        rapidjson::Document doc;
+        auto huffmanMessageObject = new Huffman_Message();
+        doc.Parse(s.c_str());
+
+        huffmanMessageObject->setCompress_Code(doc["Code"].GetString());
+        Value& huffmanTable = doc["HuffmanTable"];
+        assert(huffmanTable.IsArray());
+        for (SizeType i = 0; i < huffmanTable.Size(); i++) {
+            auto huffman = new Huffman_pair();
+            huffman->setCH(huffmanTable[i]["huffman_ch"].GetString()[0]);
+            huffman->setCode(huffmanTable[i]["huffman_codes"].GetString());
+            huffmanMessageObject->getHuffman_Table()->append(huffman);
+
+        }
+        return huffmanMessageObject;
     }
 
 };

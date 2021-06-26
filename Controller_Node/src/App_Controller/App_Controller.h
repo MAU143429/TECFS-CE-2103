@@ -11,7 +11,19 @@ class App_Controller{
 
 public:
 
-    static void Controller_App(const string& jsonString){
+    static string Controller_App(const string& jsonString){
+    string app_sms = JSON_Management::GetJSONString("App",jsonString);
+
+
+    if(app_sms == "CEROBOT"){
+
+        string path = JSON_Management::GetJSONString("Path",jsonString);
+
+
+
+    }else{
+
+    };
 
 
 
