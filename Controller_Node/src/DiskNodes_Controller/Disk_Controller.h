@@ -37,7 +37,17 @@ public:
 
     }
 
-    static string Open_Call(){
+    static string Open_Call(string keyword){
+
+        auto d1_sms = new DiskMessage();
+        auto d2_sms = new DiskMessage();
+
+        d1_sms->setFilename(keyword);
+        d1_sms->setRequest("OPEN");
+        d2_sms->setFilename(keyword);
+        d2_sms->setRequest("OPEN");
+        string final_sms1 = JSON_Management::DiskMessageToJSON(d1_sms);
+        string final_sms2 = JSON_Management::DiskMessageToJSON(d2_sms);
 
         /**
          * PIDE LOS STRINGS DE CADA UNO DE LOS DISCOS, LOS UNE Y LOS DEVUELVE EN BINARIO
