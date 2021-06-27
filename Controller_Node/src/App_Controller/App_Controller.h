@@ -11,6 +11,7 @@
 #include "../Algorithms/BinaryConverter.h"
 #include "../UtilJSON/JSON_Management.h"
 #include <dirent.h>
+#include "../DiskNodes_Controller/Sender.h"
 
 using namespace std;
 
@@ -25,9 +26,9 @@ public:
     static void Save_Info(const string& jsonString){
 
         const char *path = JSON_Management::GetJSONString("Path", jsonString).c_str();
+        string dirpath = JSON_Management::GetJSONString("Path", jsonString);
 
         auto filesList = new SimplyLinkedList<string>();
-
         DIR *dir;
         struct dirent *file;
         if ((dir = opendir(path)) != NULL) {
@@ -44,23 +45,29 @@ public:
 
             size_t lastindex = filesList->get(i).find_last_of(".");
             stringList->append(filesList->get(i).substr(0, lastindex));
-
             cout << filesList->get(i) << "\n";
             cout << stringList->get(i) << "\n";
+        }
+
+        for (int i = 0; i < filesList->getLen(); ++i) {
+            string txt_info = Read_File((dirpath + "/" + filesList->get(i)));
+            string filename = stringList->get(i);
+            string txt_binary = File_Compression(txt_info);
+            Divide_files(txt_binary);
+            Sender::Save_Call(DISK1_INFO,DISK2_INFO,PARITY_DISK_INFO,filename);
         }
 
     }
 
     static void  Extract_txt(const string& jsonString){
 
-        string tag =  JSON_Management::GetJSONString("Keyword", jsonString);
-
-
-        /**
-         * QUEDE PROGRAMANDO AQUI
-         * solicita a los 3 discos la informacion de un archivo en especifico
-         */
+        string tag =  JSON_Management::GetJSONString("Filename", jsonString);
+        Sender::Open_Call(tag);
+        string binary_code = Build_files(DISK1_INFO,DISK2_INFO);
+        string text  = File_Decompression(binary_code);
+        Sender::Send_File(text);
     }
+
     static SimplyLinkedList<string>* Search_Words(string keyword) {
 
         auto tempList = new SimplyLinkedList<string>();
@@ -99,9 +106,6 @@ public:
 
     }
 
-    static string File_Decompression(const string& jsonString){
-
-    }
     static string File_Compression(string text){
         string result;
         result = BinaryConverter::String_toBinary(text);
@@ -143,6 +147,18 @@ public:
         return result;
 
     }
+
+    static string getDisk1_Info(){
+        return DISK1_INFO;
+    }
+    static string getDisk2_Info(){
+        return DISK2_INFO;
+
+    }static string getParityD_Info(){
+        return PARITY_DISK_INFO;
+    }
+
+
 };
 
 #endif //TEC_FS_APP_CONTROLLER_H

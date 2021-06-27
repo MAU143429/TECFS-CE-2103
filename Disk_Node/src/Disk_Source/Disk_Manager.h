@@ -57,13 +57,14 @@ public:
         BlockList->append(block8);
 
     }
-    static void Save_Info(string binary_code){
+    static void Save_Info(string binary_code,string name){
 
         for (int i = 0; i < BlockList->getLen(); ++i){
 
-            if(BlockList->get(i)->inUse == false){
-                BlockList->get(i)->inUse = true;
+            if(BlockList->get(i)->getUse() == false){
+                BlockList->get(i)->setUse(true);
                 BlockList->get(i)->Write(binary_code);
+                BlockList->get(i)->setMetadata(name);
                 break;
             }
         }
@@ -78,7 +79,8 @@ public:
 
         if(type == "SAVE"){
             string save_msg = JSON_Management::GetJSONString("Binary_Script",msg);
-            Save_Info(save_msg);
+            string name = JSON_Management::GetJSONString("Filename",msg);
+            Save_Info(save_msg,name);
             response->setClient("DISK");
             response->setSave("TRUE");
             if(client_type == "1"){

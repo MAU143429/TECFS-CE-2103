@@ -13,8 +13,16 @@ using namespace std;
 class AppMessage
 {
 private:
-    string kw_b1,kw_b2,kw_b3,kw_b4,kw_b5,kw_b6,kw_b7,kw_b8,status;
+    string kw_b1,kw_b2,kw_b3,kw_b4,kw_b5,kw_b6,kw_b7,kw_b8,status,text;
 public:
+    const string &getText() const {
+        return text;
+    }
+
+    void setText(const string &text) {
+        AppMessage::text = text;
+    }
+
     const string &getKwB1() const {
         return kw_b1;
     }
@@ -86,10 +94,6 @@ public:
     void setStatus(const string &status) {
         AppMessage::status = status;
     }
-
-public:
-
-
 
 };
 

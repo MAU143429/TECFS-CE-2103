@@ -163,12 +163,11 @@ public:
                             string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
                             string first = JSON_Management::GetJSONString("First_Time", msg);
                             string type1  = JSON_Management::GetJSONString("Client_Type", msg);
+                            string type2 =  JSON_Management::GetJSONString("Specific_Type", msg);
                             if(first == "TRUE"){
-                                string type2 =  JSON_Management::GetJSONString("Specific_Type", msg);
                                 Identify_Client(type1,type2,i);
                             }else{
-                                string type2 =  JSON_Management::GetJSONString("Specific_Type", msg);
-                                Identify_Controller(type1,type2,message);
+                                Identify_Controller(type1,type2,msg);
                             }
 
                         }
@@ -220,11 +219,11 @@ public:
 
         if(type == "DISK"){
             if(specific == "D1"){
-                Disk_Controller::Controller_Disk(sms);
+                Disk_Controller::Controller_Disk(sms,1);
             }else if(specific == "D2"){
-                Disk_Controller::Controller_Disk(sms);
+                Disk_Controller::Controller_Disk(sms,2);
             }else if(specific == "P1"){
-                Disk_Controller::Controller_Disk(sms);
+                Disk_Controller::Controller_Disk(sms,3);
             }
         }else {
             string tag =  JSON_Management::GetJSONString("Request", sms);
@@ -248,6 +247,20 @@ public:
                 Send(App_Client,result.c_str());
             }
         }
+    }
+
+    static int getDisk1_Client(){
+        return Disk1_Client;
+    }
+    static int getDisk2_Client(){
+        return Disk2_Client;
+
+    }
+    static int getParity_Client(){
+        return Parity_Disk_Client;
+    }
+    static int getApp_Client(){
+        return App_Client;
     }
 };
 

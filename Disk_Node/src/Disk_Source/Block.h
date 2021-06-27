@@ -16,13 +16,14 @@ using namespace std;
 
 MetaData *metadata;
 Book *book;
+static bool inUse;
 
 class Block
 {
 public:
 
     static string file_path;
-    static bool inUse;
+
 
     static void InitBlock(int num_block,string path){
 
@@ -48,6 +49,13 @@ public:
 
     static void setMetadata(string newdata){
         metadata->setName(newdata);
+    }
+    static bool getUse(){
+        return inUse;
+    }
+
+    static void setUse(bool newdata){
+        inUse = newdata;
     }
 
 };

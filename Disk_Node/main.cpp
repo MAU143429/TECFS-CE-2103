@@ -16,7 +16,6 @@ void RunClient(const string& client) {
 void RunDisks(const string& path){
     Disk_Manager::InitDisk(path);
     PATH = path;
-
 }
 
 int main() {

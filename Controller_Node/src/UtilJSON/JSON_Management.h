@@ -132,6 +132,9 @@ public:
         writer.Key("KW_B8");
         writer.String(message->getKwB8().c_str());
 
+        writer.Key("Text");
+        writer.String(message->getText().c_str());
+
         writer.EndObject();
 
         return buffer.GetString();
