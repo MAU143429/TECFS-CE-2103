@@ -357,8 +357,7 @@ public:
 
 
             }else if(tag == "OPEN"){
-
-                //App_Controller::Extract_txt(sms);
+                
                 string tag =  JSON_Management::GetJSONString("Filename", sms);
                 auto d1_sms = new DiskMessage();
                 auto d2_sms = new DiskMessage();
@@ -371,21 +370,14 @@ public:
                 Send("DISK1",final_sms1.c_str());
                 Send("DISK2",final_sms2.c_str());
 
-                while(results != 2){
-                    string binary_code = App_Controller::Build_files(App_Controller::getDisk1_Info(),App_Controller::getDisk2_Info());
-                    string text  = App_Controller::File_Decompression(binary_code);
-                    auto filesms = new AppMessage();
-                    filesms->setText(text);
-                    string final_sms = JSON_Management::AppMessageToJSON(filesms);
-                    Server::getInstance()->Send("APP",final_sms.c_str());
-                }
-                /**string binary_code = App_Controller::Build_files(App_Controller::getDisk1_Info(),App_Controller::getDisk2_Info());
+
+            }else if (tag == "DISPLAY"){
+                string binary_code = App_Controller::Build_files(App_Controller::getDisk1_Info(),App_Controller::getDisk2_Info());
                 string text  = App_Controller::File_Decompression(binary_code);
                 auto filesms = new AppMessage();
                 filesms->setText(text);
                 string final_sms = JSON_Management::AppMessageToJSON(filesms);
-                Server::getInstance()->Send("APP",final_sms.c_str());*/
-
+                Server::getInstance()->Send("APP",final_sms.c_str());
             }else{
                 auto response = new AppMessage();
                 string kw =  JSON_Management::GetJSONString("Keyword", sms);
