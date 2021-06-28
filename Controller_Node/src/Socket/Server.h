@@ -252,7 +252,7 @@ public:
 
                 }else{
                     string binarycode = JSON_Management::GetJSONString("Binary",sms);
-                    App_Controller::getDisk1_Info() = binarycode;
+                    App_Controller::setDisk1_Info(binarycode);
                     results++;
                 }
 
@@ -274,7 +274,7 @@ public:
 
                 }else{
                     string binarycode = JSON_Management::GetJSONString("Binary",sms);
-                    App_Controller::getDisk2_Info() = binarycode;
+                    App_Controller::setDisk2_Info(binarycode);
                     results++;
                 }
             }else if(specific == "P1"){
@@ -293,7 +293,7 @@ public:
 
                 }else{
                     string binarycode = JSON_Management::GetJSONString("Binary",sms);
-                    App_Controller::getParityD_Info() = binarycode;
+                    App_Controller::setParityD_Info(binarycode);
                 }
             }
         }else {
@@ -372,8 +372,13 @@ public:
 
 
             }else if (tag == "DISPLAY"){
+
                 string binary_code = App_Controller::Build_files(App_Controller::getDisk1_Info(),App_Controller::getDisk2_Info());
+                cout << "DISK 1 INFO: "<<App_Controller::getDisk1_Info()<< endl;
+                cout << "DISK 2 INFO: "<<App_Controller::getDisk2_Info()<< endl;
+                cout << "\nSOY EL BINARY CODE: " << binary_code << endl;
                 string text  = App_Controller::File_Decompression(binary_code);
+                cout << "\nSOY EL TEXT" << text << endl;
                 auto filesms = new AppMessage();
                 filesms->setText(text);
                 string final_sms = JSON_Management::AppMessageToJSON(filesms);

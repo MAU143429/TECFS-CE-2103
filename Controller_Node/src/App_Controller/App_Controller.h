@@ -169,6 +169,15 @@ public:
     }static string getParityD_Info(){
         return PARITY_DISK_INFO;
     }
+    static void setDisk1_Info(string info){
+        DISK1_INFO = info;
+    }
+    static void setDisk2_Info(string info){
+        DISK2_INFO = info;
+
+    }static void setParityD_Info(string info){
+        PARITY_DISK_INFO = info;
+    }
 
     static SimplyLinkedList<string> getStringList(){
         return *stringList;

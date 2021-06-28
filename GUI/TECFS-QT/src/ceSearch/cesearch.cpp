@@ -58,28 +58,6 @@ void ceSEARCH::on_searchBtn_clicked()
                 ui->listWidget->addItem(QString::fromStdString(title));
             }
         }
-
-        /**auto blockBools = new SimplyLinkedList<bool>();
-        blockBools->append(false);
-        for (int i = 1; i < 9; ++i) {
-            string key = ("KW_B"+to_string(i));
-            cout << "SOY KEY: " << key << JSON_Management::GetJSONString(key,msg) <<endl;
-            if (JSON_Management::GetJSONString(key,msg) != "" ){
-                blockBools->append(true);
-            }else{
-                blockBools->append(false);
-            }
-        }
-        for (int i = 1; i < blockBools->getLen(); ++i) {
-            string key = ("KW_B"+to_string(i));
-            cout << "SOY KEY2: " << key<< endl;
-            if(blockBools->get(i) == true){
-                string title = JSON_Management::GetJSONString(key, msg);
-                cout << title;
-                ui->listWidget->addItem(QString::fromStdString(title));
-            }
-        }*/
-
     }
 }
 
@@ -90,6 +68,18 @@ void ceSEARCH::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     bookMsg->setFileName(item->text().toStdString());
     bookMsg->setClientType("APP");
     bookMsg->setRequest("OPEN");
+    string jsonMsg = JSON_Management::TypeMessageToJSON(bookMsg);
+    Client::getInstance()->Send(jsonMsg.c_str());
+
+
+}
+
+void ceSEARCH::on_pushButton_clicked()
+{
+    auto bookMsg = new TypeMessage();
+    bookMsg->setAppName("CESEARCH");
+    bookMsg->setClientType("APP");
+    bookMsg->setRequest("DISPLAY");
     string jsonMsg = JSON_Management::TypeMessageToJSON(bookMsg);
     Client::getInstance()->Send(jsonMsg.c_str());
 
