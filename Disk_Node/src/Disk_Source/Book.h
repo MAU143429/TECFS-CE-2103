@@ -18,6 +18,10 @@ private:
     string path;
 public:
 
+    /**
+     * @brief This method allow to create a new book un specific path of the system
+     * @param newbook is the path
+     */
     void setBook(const string &newbook) {
         path = newbook;
         book.open(newbook);
@@ -25,12 +29,20 @@ public:
 
     }
 
+    /**
+     * @brief This method allow to write different things in a specif txt file
+     * @param newtxt is the text that you want to save
+     */
     void Write(const string &newtxt){
         book.open(Book::path);
         book << newtxt;
         book.close();
 
     }
+    /**
+     * @brief This method allow to read the content of txt files
+     * @return the txt file content
+     */
     string Read(){
         ifstream RFile(Book::path);
         string output;

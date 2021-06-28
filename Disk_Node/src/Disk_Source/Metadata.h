@@ -9,6 +9,9 @@
 
 using namespace std;
 
+/**
+ * @brief This class contains the metadata of the file in a specific block.
+ */
 class MetaData
 {
 private:
