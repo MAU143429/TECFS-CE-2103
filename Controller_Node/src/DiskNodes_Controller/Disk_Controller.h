@@ -9,7 +9,6 @@
 
 using namespace std;
 
-static int confirmNum;
 class Disk_Controller{
 
 public:
@@ -19,13 +18,7 @@ public:
         string response = JSON_Management::GetJSONString("Save",jsonString);
 
         if(response  == "TRUE"){
-            confirmNum++;
-            if(confirmNum == 3) {
-                app_response->setStatus("TRUE");
-                string result = JSON_Management::AppMessageToJSON(app_response);
-                cout << "EL MENSAJE SE GUARDO CON EXITO" << endl;
-                confirmNum = 0;
-            }
+
 
         }else{
             string binarycode = JSON_Management::GetJSONString("Binary",jsonString);
