@@ -91,14 +91,18 @@ void ceSEARCH::on_pushButton_clicked()
     auto huffmanMessage = new Huffman_Message();
     huffmanMessage = JSON_Management::DeserializetoHuffmanMessage(response);
     string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
-
+    cout << endl << msg << endl;
 
     string text = JSON_Management::GetJSONString("Text",msg);
+    cout << text << endl;
+    cout << text.length() << endl;
+    string output;
     for (int i = 0; i < text.length(); ++i) {
         char c = text[i];
-        string output;
         if(c == ':'){
             ui->textEdit->append(output.c_str());
+            ui->textEdit->setText(output.c_str());
+            cout << endl << output << endl;
             output.clear();
         }else{
             output.push_back(c);
