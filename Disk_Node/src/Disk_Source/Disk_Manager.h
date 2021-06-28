@@ -28,6 +28,10 @@ public:
 
     static string Disk_Path;
 
+    /**
+     * @brief This method created 8 blocks in a specific path of the system
+     * @param path the path of the directory
+     */
     static void InitDisk(string path){
 
         block1 = new Block;
@@ -57,6 +61,12 @@ public:
         BlockList->append(block8);
 
     }
+    /**
+     * @brief This method save the binary content in specific book in a specific block of the raid
+     * @param binary_code is a string that contain binary number of the file
+     * @param name is the name of the txt file
+     * @return number that confirm the operation save
+     */
     static int Save_Info(string binary_code,string name){
 
         for (int i = 0; i < BlockList->getLen(); ++i){
@@ -70,6 +80,12 @@ public:
         }
     }
 
+    /**
+     * @brief This method recieved the messages of the server and divide the different calls in differents methods.
+     * @param jsonstring is the message of the server
+     * @param client_type is the number of disk
+     * @return is the answer of the request.
+     */
     static string Select_Request(const string& jsonstring,string client_type){
         cout << "ENTRE AL SELECT REQUEST\n";
         auto huffmanMessage = new Huffman_Message();
@@ -120,6 +136,11 @@ public:
 
 
     }
+    /**
+     * @brief This method locate a number of a block using the metadata.
+     * @param filename the name of the file
+     * @return the number of block
+     */
     static string Locate_Block(string filename){
         for (int i = 1; i < 9; ++i) {
              string name = BlockList->get(i)->getMetadata();
@@ -129,6 +150,11 @@ public:
              return to_string(i);
         }
     }
+    /**
+     * @brief This method extract the context of a specific block
+     * @param numblock is the number of block
+     * @return the text inside the txt file
+     */
     static string Extract_BinaryCode(string numblock){
         string binary_txt;
         if(numblock == "1"){
