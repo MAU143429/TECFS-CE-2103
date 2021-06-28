@@ -9,7 +9,7 @@
 
 using namespace std;
 
-static bool CONFIRM_FILE;
+static int confirmNum;
 class Disk_Controller{
 
 public:
@@ -17,12 +17,15 @@ public:
     static void Controller_Disk(const string& jsonString,int client){
         auto app_response = new AppMessage();
         string response = JSON_Management::GetJSONString("Save",jsonString);
+
         if(response  == "TRUE"){
-            app_response->setStatus("TRUE");
-            string result = JSON_Management::AppMessageToJSON(app_response);
-            CONFIRM_FILE = true;
-            //Sender::Confirmation_SMS(result);
-            cout << "EL MENSAJE SE GUARDO CON EXITO"<< endl;
+            confirmNum++;
+            if(confirmNum == 3) {
+                app_response->setStatus("TRUE");
+                string result = JSON_Management::AppMessageToJSON(app_response);
+                cout << "EL MENSAJE SE GUARDO CON EXITO" << endl;
+                confirmNum = 0;
+            }
 
         }else{
             string binarycode = JSON_Management::GetJSONString("Binary",jsonString);
@@ -35,9 +38,7 @@ public:
             }
         }
     }
-    static bool getConfirmStatus(){
-        return CONFIRM_FILE;
-    }
+
 
 };
 #endif //TEC_FS_DISK_CONTROLLER_H

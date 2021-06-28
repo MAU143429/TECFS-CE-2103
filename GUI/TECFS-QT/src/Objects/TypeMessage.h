@@ -22,7 +22,16 @@ private:
     string clientType;
     string specificType;
     string fileName;
+    string request;
 public:
+    const string &getRequest() const {
+        return request;
+    }
+
+    void setRequest(const string &request) {
+        TypeMessage::request = request;
+    }
+
     const string &getFileName() const {
         return fileName;
     }

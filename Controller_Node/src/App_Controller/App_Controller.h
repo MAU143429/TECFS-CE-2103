@@ -84,9 +84,14 @@ public:
             string stringCompare = stringList->get(i);
             if (stringCompare.find(keyword) != string::npos) {
                 tempList->append(stringCompare);
+                cout << "\nSOY LA COINCIDENCIA: " << stringCompare << endl;
             }else{
+                cout << "\nNO HAY COINCIDENCIA: " <<  endl;
                 tempList->append(empty);
             }
+        }
+        while (tempList->getLen()!= 8){
+            tempList->append(empty);
         }
         return tempList;
     }
@@ -126,9 +131,8 @@ public:
     }
 
     static void Divide_files(string binary_code){
-        int half = binary_code.size()/2;
         char d1,d2,p3;
-        for (int i = 0; i < half; ++i) {
+        for (int i = 0; i < binary_code.size(); i = i+2) {
             d1 = binary_code[i];
             d2 = binary_code[i+1];
             if(d1 == '1' && d2 == '0' or d1 == '0' && d2 == '1'){
@@ -166,15 +170,11 @@ public:
         return PARITY_DISK_INFO;
     }
 
-    static bool getSaveStatus(){
-        return SAVE_FILES;
+    static SimplyLinkedList<string> getStringList(){
+        return *stringList;
     }
-    static bool getSendStatus(){
-        return SEND_FILES;
-
-    }
-    static bool getOpenStatus(){
-        return OPEN_FILES;
+    static void setStringList(string in){
+        stringList->append(in);
     }
 
 
