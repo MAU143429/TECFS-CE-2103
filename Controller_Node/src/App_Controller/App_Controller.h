@@ -151,10 +151,17 @@ public:
     static string Build_files(string code1,string code2){
         char c1,c2;
         string result;
+        string merge;
         for (int i = 0; i < code1.length(); ++i) {
             c1 = code1[i];
             c2 = code2[i];
-            result += (c1+c2);
+            merge = c1 + c2;
+            result += merge;
+
+            cout << "SOY EL C1" << c1 << endl;
+            cout << "SOY EL C2" << c2 << endl;
+            cout << "SOY EL MERGE" << merge << endl;
+            cout << "SOY EL Result" << result << endl;
         }
         return result;
 
