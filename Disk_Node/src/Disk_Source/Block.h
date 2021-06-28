@@ -10,37 +10,52 @@
 #include "Metadata.h"
 #include "Book.h"
 #include <fstream>
+#include <experimental/filesystem>
 
 using namespace std;
 
+MetaData *metadata;
+Book *book;
+static bool inUse;
+
 class Block
 {
-
 public:
-    static auto metadata = new MetaData();
-    static auto book = new Book();
-    static ofstream file;
+
     static string file_path;
+
 
     static void InitBlock(int num_block,string path){
 
-        file_path =(path + to_string(num_block)+".txt");
-        file.open(file_path);
-        file << mFile.toStdString();
-        file.close();
-
+        inUse = false;
+        metadata = new MetaData();
+        book = new Book();
+        string file = (path +"block" + to_string(num_block)+".txt");
+        book->setBook(file);
     }
-
     static void Write(string newtxt){
-
-        file = newtxt;
+        book->Write(newtxt);
     }
 
     static string Read(){
-        ifstream RFile(file_path);
-        string output;
-        getline(RFile,output);
-        return output;
+        string result;
+        result = book->Read();
+        return result;
+    }
+
+    static string getMetadata(){
+        metadata->getName();
+    }
+
+    static void setMetadata(string newdata){
+        metadata->setName(newdata);
+    }
+    static bool getUse(){
+        return inUse;
+    }
+
+    static void setUse(bool newdata){
+        inUse = newdata;
     }
 
 };

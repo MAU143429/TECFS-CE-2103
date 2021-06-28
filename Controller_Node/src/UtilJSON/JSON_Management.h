@@ -11,7 +11,8 @@
 #include "../../../lib/rapidjson/writer.h"
 #include "../../../lib/rapidjson/document.h"
 #include "../../../lib/DataStructures/SimplyList.h"
-#include "../Objects/TypeMessage.h"
+#include "../Objects/AppMessage.h"
+#include "../Objects/DiskMessage.h"
 #include "../Objects/Huffman_Message.h"
 #include "../Objects/Huffman_pair.h"
 
@@ -44,12 +45,28 @@ public:
 
         }
     }
+    static string GetJSONStringArray(string key, const string& jsonString) {
+        rapidjson::Document document;
+        document.Parse<kParseDefaultFlags>(jsonString.c_str());
+        const char* searchedString;
+        if (document.HasMember(key.c_str())) {
+            if (document[key.c_str()].IsString()) {
+                searchedString = document[key.c_str()].GetString();
+                return searchedString;
+            }
+        }
+        else {
+            cout << "ERROR : KEY NOT FOUND" << endl;
+            return " ";
+
+        }
+    }
     /**
-   * @brief Method that serializes a TypeMessage.h method to a JSON string
-   * @param typemessageObject is the TypeMessage.h object that contains all the information
+   * @brief Method that serializes a DiskMessage.h method to a JSON string
+   * @param DIskmessageObject is the TypeMessage.h object that contains all the information
    * @return the serialized object into a JSON string
    */
-    static string TypeMessageToJSON(TypeMessage* message){
+    static string DiskMessageToJSON(DiskMessage* message){
         Document json_document;
         StringBuffer buffer;
 
@@ -59,8 +76,64 @@ public:
 
         writer.StartObject();
 
-        writer.Key("Message");
-        writer.String(message->getMessage().c_str());
+        writer.Key("Binary_Script");
+        writer.String(message->getBinary_Code().c_str());
+
+        writer.Key("Request");
+        writer.String(message->getRequest().c_str());
+
+        writer.Key("Filename");
+        writer.String(message->getFilename().c_str());
+
+        writer.EndObject();
+
+        return buffer.GetString();
+    }
+
+    /**
+* @brief Method that serializes a AppMessage.h method to a JSON string
+* @param AppmessageObject is the AppMessage.h object that contains all the information
+* @return the serialized object into a JSON string
+*/
+    static string AppMessageToJSON(AppMessage *message){
+        Document json_document;
+        StringBuffer buffer;
+
+        Document::AllocatorType& allocator = json_document.GetAllocator();
+
+        Writer<rapidjson::StringBuffer> writer(buffer);
+
+        writer.StartObject();
+
+        writer.Key("Save_Status");
+        writer.String(message->getStatus().c_str());
+
+        writer.Key("KW_B1");
+        writer.String(message->getKwB1().c_str());
+
+        writer.Key("KW_B2");
+        writer.String(message->getKwB2().c_str());
+
+        writer.Key("KW_B3");
+        writer.String(message->getKwB3().c_str());
+
+        writer.Key("KW_B4");
+        writer.String(message->getKwB4().c_str());
+
+        writer.Key("KW_B5");
+        writer.String(message->getKwB5().c_str());
+
+        writer.Key("KW_B6");
+        writer.String(message->getKwB6().c_str());
+
+        writer.Key("KW_B7");
+        writer.String(message->getKwB7().c_str());
+
+        writer.Key("KW_B8");
+        writer.String(message->getKwB8().c_str());
+
+        writer.Key("Text");
+        writer.String(message->getText().c_str());
 
         writer.EndObject();
 
@@ -119,6 +192,28 @@ public:
 
         writer->EndObject();
     }
+    /**
+    * @brief Method that serializes a Huffman_pair.h object using a writer object
+    * @param writer object used for serializing object and huffmanObject is the Huffman_pair.h object
+    */
+    static Huffman_Message *DeserializetoHuffmanMessage(const string &s){
+        rapidjson::Document doc;
+        auto huffmanMessageObject = new Huffman_Message();
+        doc.Parse(s.c_str());
+
+        huffmanMessageObject->setCompress_Code(doc["Code"].GetString());
+        Value& huffmanTable = doc["HuffmanTable"];
+        assert(huffmanTable.IsArray());
+        for (SizeType i = 0; i < huffmanTable.Size(); i++) {
+            auto huffman = new Huffman_pair();
+            huffman->setCH(huffmanTable[i]["huffman_ch"].GetString()[0]);
+            huffman->setCode(huffmanTable[i]["huffman_codes"].GetString());
+            huffmanMessageObject->getHuffman_Table()->append(huffman);
+
+        }
+        return huffmanMessageObject;
+    }
+
 
 };
 #endif //TEC_FS_JSON_MANAGEMENT_H

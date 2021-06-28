@@ -2,6 +2,7 @@
 #define CESEARCH_H
 
 #include <QMainWindow>
+#include <QListWidget>
 
 namespace Ui {
 class ceSEARCH;
@@ -19,6 +20,8 @@ private slots:
     void on_backBtn_clicked();
 
     void on_searchBtn_clicked();
+
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
     Ui::ceSEARCH *ui;

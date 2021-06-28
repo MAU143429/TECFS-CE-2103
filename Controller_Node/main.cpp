@@ -4,22 +4,17 @@
 #include "src/Objects/Huffman_Message.h"
 #include "src/UtilJSON/JSON_Management.h"
 #include "src/Socket/Server.h"
+#include "src/Algorithms/BinaryConverter.h"
 
 using namespace std;
 
 void RunServer() {
     cout << "Server is running" << endl;
-    Server::InitServer();
+    Server::getInstance()->InitServer();
 }
 
 void mainv2(){
-    auto newSMS = new TypeMessage();
-    newSMS->setMessage("SOY EL STRING DE PRUEBA DE PALABRA");
-    string prueba = JSON_Management::TypeMessageToJSON(newSMS);
-    pair<string,SimplyLinkedList<Huffman_pair*>*> print;
-    print = HuffmanCompression::buildHuffmanTree(prueba);
-    string mau = HuffmanCompression::Decode_Huffman(print.first,print.second);
-    cout << "SOY EL STRING MAU" << mau << endl;
+
 }
 int main() {
 

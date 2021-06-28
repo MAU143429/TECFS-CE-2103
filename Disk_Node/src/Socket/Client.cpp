@@ -1,26 +1,25 @@
 //
 // Created by mau on 6/14/21.
 //
-#include <unistd.h>
-#include <cstdio>
-#include <sys/socket.h>
-#include <cstdlib>
-#include <netinet/in.h>
-#include <cstring>
-#include <iostream>
-#include <pthread.h>
-#include <arpa/inet.h>
-#include "../Objects/Huffman_Message.h"
-#include "../../../lib/DataStructures/SimplyList.h"
-#include "../UtilJSON/JSON_Management.h"
-#include "../Algorithms/HuffmanCompression.h"
 
+#include "Client.h"
 
-using namespace std;
+Client* Client::unique_instance {nullptr};
+mutex Client::mutex_;
 
-int clientSocket = socket(AF_INET,SOCK_STREAM,0);
+Client::Client() {}
+Client::~Client() {}
+/**
+ * @brief Getter for the unique instance of the client
+ * @return the client instance
+ */
+Client *Client::getInstance() {
+    lock_guard<std::mutex> lock(mutex_);
+    if (unique_instance == nullptr){unique_instance = new Client();}
+    return unique_instance;
+}
 
-static void Send(const char *msg) {
+void Client::Send(const char *msg) {
     pair<string,SimplyLinkedList<Huffman_pair*>*> compressed;
     compressed = HuffmanCompression::buildHuffmanTree(msg);
     auto final_sms = new Huffman_Message();
@@ -29,13 +28,15 @@ static void Send(const char *msg) {
         final_sms->getHuffman_Table()->append(compressed.second->get(i));
     }
     string final = JSON_Management::HuffmanMessageToJSON(final_sms);
-    int sendRes = send(clientSocket, final.c_str(), strlen(msg), 0);
+    cout << final;
+    int sendRes = send(clientSocket, final.c_str(), final.size()+1, 0);
     if (sendRes == -1) {
         std::cout << "SEND MESSAGE FAILED " << std::endl;
     }
 }
-int InitClient()
+int Client::InitClient(string client)
 {
+    NUM_CLIENT = client;
     int port;
     if(clientSocket == -1){
         return 1;
@@ -54,8 +55,21 @@ int InitClient()
     if(connectRes == 0){
         cout<< "You have connect to server !" << endl;
     }
-    string msg = "Soy el cliente y me acabo de conectar";
-    Send(msg.c_str());
+
+    auto Connect_sms = new TypeMessage();
+    Connect_sms->setClient("DISK");
+    Connect_sms->setFirst("TRUE");
+    if(client == "1"){
+        Connect_sms->setSpecific("D1");
+    }else if(client == "2"){
+        Connect_sms->setSpecific("D2");
+    }else{
+        Connect_sms->setSpecific("P1");
+    }
+    string newjson = JSON_Management::TypeMessageToJSON(Connect_sms);
+    Send(newjson.c_str());
+
+
     if(connectRes == -1){
         return 1;
     }
@@ -82,8 +96,12 @@ int InitClient()
         }
         else
         {
-            //		Display response
-            cout << "SERVER> " << string(buf, bytesReceived) << "\r\n";
+            client_message = string(buf, 0, bytesReceived);
+            if(!client_message.empty()){
+                const string &response = Disk_Manager::Select_Request(client_message,NUM_CLIENT);
+                Send(response.c_str());
+
+            }
         }
 
     }while(true);

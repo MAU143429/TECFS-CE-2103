@@ -6,13 +6,14 @@
 #define DISK_NODE_HUFFMAN_MESSAGE_H
 #include <string>
 #include"../Objects/Huffman_pair.h"
+#include "../../../lib/DataStructures/SimplyList.h"
 using namespace std;
 
 
 class Huffman_Message
 {
 private:
-    SimplyLinkedList<Huffman_pair*> *huffman_table = new SimplyLinkedList<Huffman_pair*>();
+    SimplyLinkedList<Huffman_pair*>*huffman_table = new SimplyLinkedList<Huffman_pair*>();
     string compress_code;
 public:
 
