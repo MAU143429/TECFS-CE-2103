@@ -11,9 +11,14 @@
 #include "../Algorithms/BinaryConverter.h"
 #include "../UtilJSON/JSON_Management.h"
 #include <dirent.h>
-#include "../DiskNodes_Controller/Sender.h"
+
 
 using namespace std;
+
+
+static bool SAVE_FILES;
+static bool OPEN_FILES;
+static bool SEND_FILES;
 
 static SimplyLinkedList<string> *stringList = new SimplyLinkedList<string>();
 static string DISK1_INFO;
@@ -54,7 +59,8 @@ public:
             string filename = stringList->get(i);
             string txt_binary = File_Compression(txt_info);
             Divide_files(txt_binary);
-            Sender::Save_Call(DISK1_INFO,DISK2_INFO,PARITY_DISK_INFO,filename);
+            SAVE_FILES = true;
+            //Sender::Save_Call(DISK1_INFO,DISK2_INFO,PARITY_DISK_INFO,filename);
         }
 
     }
@@ -62,10 +68,12 @@ public:
     static void  Extract_txt(const string& jsonString){
 
         string tag =  JSON_Management::GetJSONString("Filename", jsonString);
-        Sender::Open_Call(tag);
+        OPEN_FILES = true;
+        //Sender::Open_Call(tag);
         string binary_code = Build_files(DISK1_INFO,DISK2_INFO);
         string text  = File_Decompression(binary_code);
-        Sender::Send_File(text);
+        SEND_FILES = true;
+        //Sender::Send_File(text);
     }
 
     static SimplyLinkedList<string>* Search_Words(string keyword) {
@@ -156,6 +164,17 @@ public:
 
     }static string getParityD_Info(){
         return PARITY_DISK_INFO;
+    }
+
+    static bool getSaveStatus(){
+        return SAVE_FILES;
+    }
+    static bool getSendStatus(){
+        return SEND_FILES;
+
+    }
+    static bool getOpenStatus(){
+        return OPEN_FILES;
     }
 
 

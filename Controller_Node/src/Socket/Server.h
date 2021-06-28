@@ -216,21 +216,133 @@ public:
     }
 
     void Identify_Controller(const string& type,string specific,const string& sms){
-
+        /**
+         * DEBO DE CORREGIR QUE ENVIE MENSAJES CUANDO LE DE LA GANA
+         */
         if(type == "DISK"){
             if(specific == "D1"){
-                Disk_Controller::Controller_Disk(sms,1);
+                /**
+                 * INFO PARA EL DISCO 1
+                 */
+                auto app_response = new AppMessage();
+                string response = JSON_Management::GetJSONString("Save",sms);
+                if(response  == "TRUE"){
+                    app_response->setStatus("TRUE");
+                    string result = JSON_Management::AppMessageToJSON(app_response);
+                    Send(App_Client,result.c_str());
+                    cout << "EL MENSAJE SE GUARDO CON EXITO"<< endl;
+
+                }else{
+                    string binarycode = JSON_Management::GetJSONString("Binary",sms);
+                    App_Controller::getDisk1_Info() = binarycode;
+                }
+
             }else if(specific == "D2"){
-                Disk_Controller::Controller_Disk(sms,2);
+                /**
+                * INFO PARA EL DISCO 2
+                */
+                auto app_response = new AppMessage();
+                string response = JSON_Management::GetJSONString("Save",sms);
+                if(response  == "TRUE"){
+                    app_response->setStatus("TRUE");
+                    string result = JSON_Management::AppMessageToJSON(app_response);
+                    Send(App_Client,result.c_str());
+                    cout << "EL MENSAJE SE GUARDO CON EXITO"<< endl;
+
+                }else{
+                    string binarycode = JSON_Management::GetJSONString("Binary",sms);
+                    App_Controller::getDisk2_Info() = binarycode;
+                }
             }else if(specific == "P1"){
-                Disk_Controller::Controller_Disk(sms,3);
+                auto app_response = new AppMessage();
+                string response = JSON_Management::GetJSONString("Save",sms);
+                if(response  == "TRUE"){
+                    app_response->setStatus("TRUE");
+                    string result = JSON_Management::AppMessageToJSON(app_response);
+                    Send(App_Client,result.c_str());
+                    cout << "EL MENSAJE SE GUARDO CON EXITO"<< endl;
+
+                }else{
+                    string binarycode = JSON_Management::GetJSONString("Binary",sms);
+                    App_Controller::getParityD_Info() = binarycode;
+                }
             }
         }else {
             string tag =  JSON_Management::GetJSONString("Request", sms);
             if(tag == "SAVE"){
-                App_Controller::Save_Info(sms);
+
+                const char *path = JSON_Management::GetJSONString("Path", sms).c_str();
+                string dirpath = JSON_Management::GetJSONString("Path", sms);
+
+                auto filesList = new SimplyLinkedList<string>();
+                DIR *dir;
+                struct dirent *file;
+                if ((dir = opendir(path)) != NULL) {
+                    while ((file = readdir(dir)) != NULL) {
+                        if ( !strcmp( file->d_name, "."   )) continue;
+                        if ( !strcmp( file->d_name, ".."  )) continue;
+                        filesList->append(file->d_name);
+                    }
+                    closedir (dir);
+                } else {
+                    cout<<"No se pudo abrir el directorio\n";
+                }
+                for (int i = 0; i < filesList->getLen(); ++i) {
+
+                    size_t lastindex = filesList->get(i).find_last_of(".");
+                    stringList->append(filesList->get(i).substr(0, lastindex));
+                    cout << filesList->get(i) << "\n";
+                    cout << stringList->get(i) << "\n";
+                }
+
+                for (int i = 0; i < filesList->getLen(); ++i) {
+                    string txt_info = App_Controller::Read_File((dirpath + "/" + filesList->get(i)));
+                    string filename = stringList->get(i);
+                    string txt_binary = App_Controller::File_Compression(txt_info);
+                    App_Controller::Divide_files(txt_binary);
+                    auto d1_save = new DiskMessage();
+                    auto d2_save = new DiskMessage();
+                    auto pd_save = new DiskMessage();
+                    d1_save->setBinary_Code(App_Controller::getDisk1_Info());
+                    d2_save->setBinary_Code(App_Controller::getDisk1_Info());
+                    pd_save->setBinary_Code(App_Controller::getParityD_Info());
+                    d1_save->setRequest("SAVE");
+                    d2_save->setRequest("SAVE");
+                    pd_save->setRequest("SAVE");
+                    d1_save->setFilename(filename);
+                    d2_save->setFilename(filename);
+                    pd_save->setFilename(filename);
+                    string d1sms = JSON_Management::DiskMessageToJSON(d1_save);
+                    string d2sms = JSON_Management::DiskMessageToJSON(d2_save);
+                    string pdsms = JSON_Management::DiskMessageToJSON(pd_save);
+                    Send(Disk1_Client,d1sms.c_str());
+                    Send(Disk2_Client,d2sms.c_str());
+                    Send(Parity_Disk_Client,pdsms.c_str());
+
+                }
+
+
             }else if(tag == "OPEN"){
-                App_Controller::Extract_txt(sms);
+
+                //App_Controller::Extract_txt(sms);
+                string tag =  JSON_Management::GetJSONString("Filename", sms);
+                auto d1_sms = new DiskMessage();
+                auto d2_sms = new DiskMessage();
+                d1_sms->setFilename(tag);
+                d1_sms->setRequest("OPEN");
+                d2_sms->setFilename(tag);
+                d2_sms->setRequest("OPEN");
+                string final_sms1 = JSON_Management::DiskMessageToJSON(d1_sms);
+                string final_sms2 = JSON_Management::DiskMessageToJSON(d2_sms);
+                Send(Server::getInstance()->getDisk1_Client(),final_sms1.c_str());
+                Send(Server::getInstance()->getDisk2_Client(),final_sms2.c_str());
+                string binary_code = App_Controller::Build_files(App_Controller::getDisk1_Info(),App_Controller::getDisk2_Info());
+                string text  = App_Controller::File_Decompression(binary_code);
+                auto filesms = new AppMessage();
+                filesms->setText(text);
+                string final_sms = JSON_Management::AppMessageToJSON(filesms);
+                Server::getInstance()->Send(Server::getInstance()->getApp_Client(),final_sms.c_str());
+
             }else{
                 auto response = new AppMessage();
                 string kw =  JSON_Management::GetJSONString("Keyword", sms);
