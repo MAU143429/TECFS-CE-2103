@@ -5,6 +5,8 @@
 #include "src/UtilJSON/JSON_Management.h"
 #include "src/Socket/Server.h"
 #include "src/Algorithms/BinaryConverter.h"
+#include "src/DiskNodes_Controller/Sender.h"
+#include "../lib/DataStructures/SimplyList.h"
 
 using namespace std;
 

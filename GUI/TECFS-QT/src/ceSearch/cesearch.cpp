@@ -49,21 +49,36 @@ void ceSEARCH::on_searchBtn_clicked()
         huffmanMessage = JSON_Management::DeserializetoHuffmanMessage(response);
         string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
 
-        auto blockBools = new SimplyLinkedList<bool>();
+        cout << msg << endl;
+        for (int i = 1; i < 9; ++i) {
+            string key = ("KW_B"+to_string(i));
+            string title = JSON_Management::GetJSONString(key, msg);
+            cout << "SOY KEY: " << key << title <<endl;
+            if (JSON_Management::GetJSONString(key,msg) != "" ){
+                ui->listWidget->addItem(QString::fromStdString(title));
+            }
+        }
+
+        /**auto blockBools = new SimplyLinkedList<bool>();
         blockBools->append(false);
         for (int i = 1; i < 9; ++i) {
-            if (JSON_Management::GetJSONString("KW_B"+to_string(i),response).size() > 0 ){
+            string key = ("KW_B"+to_string(i));
+            cout << "SOY KEY: " << key << JSON_Management::GetJSONString(key,msg) <<endl;
+            if (JSON_Management::GetJSONString(key,msg) != "" ){
                 blockBools->append(true);
             }else{
                 blockBools->append(false);
             }
         }
-        for (int i = 0; i < blockBools->getLen(); ++i) {
+        for (int i = 1; i < blockBools->getLen(); ++i) {
+            string key = ("KW_B"+to_string(i));
+            cout << "SOY KEY2: " << key<< endl;
             if(blockBools->get(i) == true){
-                string title = JSON_Management::GetJSONString("KW_B" + to_string(i), response);
+                string title = JSON_Management::GetJSONString(key, msg);
+                cout << title;
                 ui->listWidget->addItem(QString::fromStdString(title));
             }
-        }
+        }*/
 
     }
 }
@@ -74,6 +89,7 @@ void ceSEARCH::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     bookMsg->setAppName("CESEARCH");
     bookMsg->setFileName(item->text().toStdString());
     bookMsg->setClientType("APP");
+    bookMsg->setRequest("OPEN");
     string jsonMsg = JSON_Management::TypeMessageToJSON(bookMsg);
     Client::getInstance()->Send(jsonMsg.c_str());
 
@@ -85,6 +101,7 @@ void ceSEARCH::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     auto huffmanMessage = new Huffman_Message();
     huffmanMessage = JSON_Management::DeserializetoHuffmanMessage(response);
     string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
+
 
     string text = JSON_Management::GetJSONString("Text",msg);
     for (int i = 0; i < text.length(); ++i) {

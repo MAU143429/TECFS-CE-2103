@@ -28,8 +28,9 @@ void Client::Send(const char *msg) {
         final_sms->getHuffman_Table()->append(compressed.second->get(i));
     }
     string final = JSON_Management::HuffmanMessageToJSON(final_sms);
-    cout << final;
+    cout << "Soy el final" << final << "\n";
     int sendRes = send(clientSocket, final.c_str(), final.size()+1, 0);
+    cout << "se envio el mensaje\n";
     if (sendRes == -1) {
         std::cout << "SEND MESSAGE FAILED " << std::endl;
     }
@@ -67,6 +68,8 @@ int Client::InitClient(string client)
         Connect_sms->setSpecific("P1");
     }
     string newjson = JSON_Management::TypeMessageToJSON(Connect_sms);
+
+    cout << "Antes de enviar\n" << newjson << "\n";
     Send(newjson.c_str());
 
 
@@ -79,14 +82,6 @@ int Client::InitClient(string client)
 
     do{
 
-        getline(cin,userInput);
-
-        int sendRes = send(clientSocket,userInput.c_str(),userInput.size()+1,0);
-
-        if(sendRes == -1){
-            cout<<"Could not send to server\r\n";
-            continue;
-        }
         //		Wait for response
         memset(buf, 0, 4096);
         int bytesReceived = recv(clientSocket, buf, 4096, 0);

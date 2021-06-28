@@ -4,12 +4,12 @@
 
 #ifndef TEC_FS_DISK_CONTROLLER_H
 #define TEC_FS_DISK_CONTROLLER_H
-#include "Sender.h"
+
 #include "../Objects/AppMessage.h"
 
 using namespace std;
 
-
+static int confirmNum;
 class Disk_Controller{
 
 public:
@@ -17,11 +17,15 @@ public:
     static void Controller_Disk(const string& jsonString,int client){
         auto app_response = new AppMessage();
         string response = JSON_Management::GetJSONString("Save",jsonString);
+
         if(response  == "TRUE"){
-            app_response->setStatus("TRUE");
-            string result = JSON_Management::AppMessageToJSON(app_response);
-            Sender::Confirmation_SMS(result);
-            cout << "EL MENSAJE SE GUARDO CON EXITO"<< endl;
+            confirmNum++;
+            if(confirmNum == 3) {
+                app_response->setStatus("TRUE");
+                string result = JSON_Management::AppMessageToJSON(app_response);
+                cout << "EL MENSAJE SE GUARDO CON EXITO" << endl;
+                confirmNum = 0;
+            }
 
         }else{
             string binarycode = JSON_Management::GetJSONString("Binary",jsonString);
@@ -34,6 +38,7 @@ public:
             }
         }
     }
+
 
 };
 #endif //TEC_FS_DISK_CONTROLLER_H

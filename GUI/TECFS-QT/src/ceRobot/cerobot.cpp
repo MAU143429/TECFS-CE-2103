@@ -38,6 +38,9 @@ void ceROBOT::on_pushBtn_clicked()
         robotMsg->setAppName("CEROBOT");
         robotMsg->setPath(ui->pathLine->text().toStdString());
         robotMsg->setClientType("APP");
+        robotMsg->setSpecificType("APP");
+        robotMsg->setFirstTime("FALSE");
+        robotMsg->setRequest("SAVE");
         string jsonMsg = JSON_Management::TypeMessageToJSON(robotMsg);
 
         Client::getInstance()->Send(jsonMsg.c_str());

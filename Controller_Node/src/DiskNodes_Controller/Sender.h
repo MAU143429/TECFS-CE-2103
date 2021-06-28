@@ -9,10 +9,17 @@
 #include "../Objects/DiskMessage.h"
 #include "../Objects/AppMessage.h"
 #include "../Socket/Server.h"
+#include "../DiskNodes_Controller/Disk_Controller.h"
+#include "../App_Controller/App_Controller.h"
 
 class Sender{
 
 public:
+
+/**
+ *
+ *
+
 
     static void Save_Call(string DISK1TXT,string DISK2TXT,string PDTXT,string filename){
         auto d1_save = new DiskMessage();
@@ -34,15 +41,12 @@ public:
         Server::getInstance()->Send(Server::getInstance()->getDisk2_Client(),d2sms);
         Server::getInstance()->Send(Server::getInstance()->getParity_Client(),pdsms);
 
-
-
     }
 
     static void Open_Call(string keyword){
 
         auto d1_sms = new DiskMessage();
         auto d2_sms = new DiskMessage();
-
         d1_sms->setFilename(keyword);
         d1_sms->setRequest("OPEN");
         d2_sms->setFilename(keyword);
@@ -65,7 +69,7 @@ public:
         string final_sms = JSON_Management::AppMessageToJSON(filesms);
         Server::getInstance()->Send(Server::getInstance()->getApp_Client(),final_sms);
     }
-
+*/
 };
 
 

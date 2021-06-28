@@ -57,7 +57,7 @@ public:
         BlockList->append(block8);
 
     }
-    static void Save_Info(string binary_code,string name){
+    static int Save_Info(string binary_code,string name){
 
         for (int i = 0; i < BlockList->getLen(); ++i){
 
@@ -65,12 +65,13 @@ public:
                 BlockList->get(i)->setUse(true);
                 BlockList->get(i)->Write(binary_code);
                 BlockList->get(i)->setMetadata(name);
-                break;
+                return 1;
             }
         }
     }
 
     static string Select_Request(const string& jsonstring,string client_type){
+        cout << "ENTRE AL SELECT REQUEST\n";
         auto huffmanMessage = new Huffman_Message();
         huffmanMessage = JSON_Management::DeserializetoHuffmanMessage(jsonstring);
         string msg = HuffmanCompression::Decode_Huffman(huffmanMessage->getCompress_Code(),huffmanMessage->getHuffman_Table());
@@ -78,9 +79,15 @@ public:
         auto response = new TypeMessage();
 
         if(type == "SAVE"){
+            cout << "ENTRE AL SAVE\n";
             string save_msg = JSON_Management::GetJSONString("Binary_Script",msg);
+            cout << "COGI EL MENSAJE\n";
             string name = JSON_Management::GetJSONString("Filename",msg);
-            Save_Info(save_msg,name);
+            cout << "TENGO EL NOMBRE DEL ARCHIVO\n";
+            int status = Save_Info(save_msg,name);
+            if(status == 1) {
+                cout << "GUARDE LA INFO\n";
+            }
             response->setClient("DISK");
             response->setSave("TRUE");
             if(client_type == "1"){
@@ -91,6 +98,7 @@ public:
                 response->setSpecific("P1");
             }
             string result = JSON_Management::TypeMessageToJSON(response);
+            cout << "HICE LA RESPUESTA\n" << result << endl;
             return result;
         }else{
             string meta = JSON_Management::GetJSONString("Filename",msg);
