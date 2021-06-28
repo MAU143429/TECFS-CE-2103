@@ -96,6 +96,9 @@ public:
         writer.Key("Filename");
         writer.String(message->getFileName().c_str());
 
+        writer.Key("Request");
+        writer.String(message->getRequest().c_str());
+
         writer.EndObject();
 
         return buffer.GetString();

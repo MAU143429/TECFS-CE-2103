@@ -125,9 +125,9 @@ public:
                 }
                 cout<<"New connection , socket fd: " << newSocket <<" ip is "<< inet_ntoa(addr.sin_addr) <<" port "<<ntohs(addr.sin_port)<<endl;
 
-                if(send(newSocket,message,strlen(message),0) != strlen(message)){
-                    cerr << "SEND ERROR";
-                }
+                //if(send(newSocket,message,strlen(message),0) != strlen(message)){
+                //    cerr << "SEND ERROR";
+                //}
                 for (int i = 0; i < max_clients; ++i) {
                     if(clientSocket[i] == 0){
                         clientSocket[i] = newSocket;
@@ -180,7 +180,7 @@ public:
 
 
     }
-    void Send(int clientSocket, const char *msg) {
+    void Send(string clientSocket, const char *msg) {
         pair<string,SimplyLinkedList<Huffman_pair*>*> compressed;
         compressed = HuffmanCompression::buildHuffmanTree(msg);
         auto final_sms = new Huffman_Message();
@@ -190,9 +190,20 @@ public:
         }
         string final = JSON_Management::HuffmanMessageToJSON(final_sms);
         cout << final;
-        int sendRes = send(clientSocket, final.c_str(), final.size()+1, 0);
+        cout<< "\nSOY EL CLIENT SOCKET: " << clientSocket << endl;
+        int clientSocketInt;
+        if(clientSocket == "DISK1"){
+            clientSocketInt = 4;
+        }else if(clientSocket == "DISK2"){
+            clientSocketInt = 5;
+        }else if(clientSocket == "PDISK"){
+            clientSocketInt = 6;
+        }else{
+            clientSocketInt = 7;
+        }
+        int sendRes = send(clientSocketInt, final.c_str(), strlen(final.c_str()), 0);
         if (sendRes == -1) {
-            std::cout << "SEND MESSAGE FAILED " << std::endl;
+            std::cout << "\nSEND MESSAGE FAILED " << std::endl;
         }
     }
 
@@ -229,7 +240,7 @@ public:
                 if(response  == "TRUE"){
                     app_response->setStatus("TRUE");
                     string result = JSON_Management::AppMessageToJSON(app_response);
-                    Send(App_Client,result.c_str());
+                    Send("APP",result.c_str());
                     cout << "EL MENSAJE SE GUARDO CON EXITO"<< endl;
 
                 }else{
@@ -246,7 +257,7 @@ public:
                 if(response  == "TRUE"){
                     app_response->setStatus("TRUE");
                     string result = JSON_Management::AppMessageToJSON(app_response);
-                    Send(App_Client,result.c_str());
+                    Send("APP",result.c_str());
                     cout << "EL MENSAJE SE GUARDO CON EXITO"<< endl;
 
                 }else{
@@ -259,7 +270,7 @@ public:
                 if(response  == "TRUE"){
                     app_response->setStatus("TRUE");
                     string result = JSON_Management::AppMessageToJSON(app_response);
-                    Send(App_Client,result.c_str());
+                    Send("APP",result.c_str());
                     cout << "EL MENSAJE SE GUARDO CON EXITO"<< endl;
 
                 }else{
@@ -271,13 +282,14 @@ public:
             string tag =  JSON_Management::GetJSONString("Request", sms);
             if(tag == "SAVE"){
 
-                const char *path = JSON_Management::GetJSONString("Path", sms).c_str();
+                cout << "ENTRE A SAVE\n";
+
                 string dirpath = JSON_Management::GetJSONString("Path", sms);
 
                 auto filesList = new SimplyLinkedList<string>();
                 DIR *dir;
                 struct dirent *file;
-                if ((dir = opendir(path)) != NULL) {
+                if ((dir = opendir(dirpath.c_str())) != NULL) {
                     while ((file = readdir(dir)) != NULL) {
                         if ( !strcmp( file->d_name, "."   )) continue;
                         if ( !strcmp( file->d_name, ".."  )) continue;
@@ -290,7 +302,7 @@ public:
                 for (int i = 0; i < filesList->getLen(); ++i) {
 
                     size_t lastindex = filesList->get(i).find_last_of(".");
-                    stringList->append(filesList->get(i).substr(0, lastindex));
+                    App_Controller::setStringList(filesList->get(i).substr(0, lastindex));
                     cout << filesList->get(i) << "\n";
                     cout << stringList->get(i) << "\n";
                 }
@@ -304,7 +316,7 @@ public:
                     auto d2_save = new DiskMessage();
                     auto pd_save = new DiskMessage();
                     d1_save->setBinary_Code(App_Controller::getDisk1_Info());
-                    d2_save->setBinary_Code(App_Controller::getDisk1_Info());
+                    d2_save->setBinary_Code(App_Controller::getDisk2_Info());
                     pd_save->setBinary_Code(App_Controller::getParityD_Info());
                     d1_save->setRequest("SAVE");
                     d2_save->setRequest("SAVE");
@@ -315,9 +327,13 @@ public:
                     string d1sms = JSON_Management::DiskMessageToJSON(d1_save);
                     string d2sms = JSON_Management::DiskMessageToJSON(d2_save);
                     string pdsms = JSON_Management::DiskMessageToJSON(pd_save);
-                    Send(Disk1_Client,d1sms.c_str());
-                    Send(Disk2_Client,d2sms.c_str());
-                    Send(Parity_Disk_Client,pdsms.c_str());
+                    cout<<"ANTES DE ENVIAR\n";
+                    Send("DISK1",d1sms.c_str());
+                    cout<<"ENVIADO 1\n";
+                    Send("DISK2",d2sms.c_str());
+                    cout<<"ENVIADO 2\n";
+                    Send("PDISK",pdsms.c_str());
+                    cout<<"ENVIADO 3\n";
 
                 }
 
@@ -334,19 +350,20 @@ public:
                 d2_sms->setRequest("OPEN");
                 string final_sms1 = JSON_Management::DiskMessageToJSON(d1_sms);
                 string final_sms2 = JSON_Management::DiskMessageToJSON(d2_sms);
-                Send(Server::getInstance()->getDisk1_Client(),final_sms1.c_str());
-                Send(Server::getInstance()->getDisk2_Client(),final_sms2.c_str());
+                Send("DISK1",final_sms1.c_str());
+                Send("DISK2",final_sms2.c_str());
                 string binary_code = App_Controller::Build_files(App_Controller::getDisk1_Info(),App_Controller::getDisk2_Info());
                 string text  = App_Controller::File_Decompression(binary_code);
                 auto filesms = new AppMessage();
                 filesms->setText(text);
                 string final_sms = JSON_Management::AppMessageToJSON(filesms);
-                Server::getInstance()->Send(Server::getInstance()->getApp_Client(),final_sms.c_str());
+                Server::getInstance()->Send("APP",final_sms.c_str());
 
             }else{
                 auto response = new AppMessage();
                 string kw =  JSON_Management::GetJSONString("Keyword", sms);
-                auto s_request = App_Controller::Search_Words(kw);
+                auto s_request = new SimplyLinkedList<string>();
+                s_request = App_Controller::Search_Words(kw);
                 response->setKwB1(s_request->get(0));
                 response->setKwB2(s_request->get(1));
                 response->setKwB3(s_request->get(2));
@@ -356,7 +373,7 @@ public:
                 response->setKwB7(s_request->get(6));
                 response->setKwB8(s_request->get(7));
                 string result = JSON_Management::AppMessageToJSON(response);
-                Send(App_Client,result.c_str());
+                Send("APP",result.c_str());
             }
         }
     }
